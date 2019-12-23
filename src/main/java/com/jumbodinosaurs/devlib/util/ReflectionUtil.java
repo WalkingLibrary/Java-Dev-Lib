@@ -4,7 +4,6 @@ import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
@@ -73,7 +72,7 @@ public class ReflectionUtil
             }
             return classes;
         }
-        catch(IOException e)
+        catch(Exception e)
         {
             e.printStackTrace();
         }
