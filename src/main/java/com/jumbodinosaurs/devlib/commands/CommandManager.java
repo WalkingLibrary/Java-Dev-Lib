@@ -39,14 +39,11 @@ public class CommandManager
             {
                 commands.add((Command) classType.newInstance());
             }
-            catch(IllegalAccessException e)
+            catch(ReflectiveOperationException e)
             {
                 e.printStackTrace();
             }
-            catch(InstantiationException e)
-            {
-                e.printStackTrace();
-            }
+    
         }
         System.out.println("Commands Size: " + commands.size());
         return commands;
