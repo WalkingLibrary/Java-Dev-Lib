@@ -24,7 +24,7 @@ public class GeneralUtil
     
     private static ResourceLoaderUtil resourceLoader = new ResourceLoaderUtil();
     
-    private static RuntimeTypeAdapterFactory<?> getRuntimeTypeAdapterFactory(String context, Class classContext)
+    public static RuntimeTypeAdapterFactory<?> getRuntimeTypeAdapterFactory(String context, Class classContext)
     {
         RuntimeTypeAdapterFactory<?> adapterFactory = RuntimeTypeAdapterFactory.of(classContext, "type");
         for(Class classType : ReflectionUtil.getSubClasses(classContext))
