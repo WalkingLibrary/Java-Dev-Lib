@@ -2,6 +2,7 @@ package com.jumbodinosaurs.devlib.util;
 
 
 import com.google.gson.Gson;
+import com.google.typeadapters.gson.RuntimeTypeAdapterFactory;
 import com.jumbodinosaurs.devlib.util.objects.HttpResponse;
 import com.jumbodinosaurs.devlib.util.objects.PostRequest;
 
@@ -22,6 +23,19 @@ public class GeneralUtil
 {
     
     private static ResourceLoaderUtil resourceLoader = new ResourceLoaderUtil();
+    
+    private static RuntimeTypeAdapterFactory<?> getRuntimeTypeAdapterFactory(String context, Class classContext)
+    {
+        RuntimeTypeAdapterFactory<?> adapterFactory = RuntimeTypeAdapterFactory.of(classContext, "type");
+        for(Class classType : ReflectionUtil.getSubClasses(classContext))
+        {
+            if(context.contains(classType.getSimpleName()))
+            {
+                adapterFactory.registerSubtype(classType, classType.getSimpleName());
+            }
+        }
+        return adapterFactory;
+    }
     
     
     public static HttpResponse sendPostRequestToJumboDinosaurs(PostRequest request)
