@@ -2,7 +2,6 @@ package com.jumbodinosaurs.devlib.util;
 
 
 import com.google.gson.Gson;
-import com.google.typeadapters.gson.RuntimeTypeAdapterFactory;
 import com.jumbodinosaurs.devlib.util.objects.HttpResponse;
 import com.jumbodinosaurs.devlib.util.objects.PostRequest;
 
@@ -23,50 +22,6 @@ public class GeneralUtil
 {
     
     private static ResourceLoaderUtil resourceLoader = new ResourceLoaderUtil();
-    
-    
-    
-    
-    /*
-     * RuntimeTypeAdapterFactory Serialization and Deserialization Note
-     * Goal: new Gson().toJson(List<Object>) -> File
-     *       File(With List<Object> in json Form) -> List<Object>
-     *       List<Object> holding Polymorphic objects
-     *
-     *       Requirements For The Object are that they contain a non-transient Field Named type
-     *       to aid in the creation of the RuntimeTypeAdapterFactory
-     *
-     *       Their Type being assigned the value of their getClass().getSimpleName()
-     *
-     *       The Retrieval of the RuntimeTypeAdapterFactory can be contextualized to the data being read
-     *       or simply the runtime classpath.
-     *
-     */
-    
-    public static RuntimeTypeAdapterFactory<?> getClassPathRuntimeTypeAdapterFactory(Class classContext)
-    {
-        
-        RuntimeTypeAdapterFactory<?> adapterFactory = RuntimeTypeAdapterFactory.of(classContext, "type");
-        for(Class classType : ReflectionUtil.getSubClasses(classContext))
-        {
-            adapterFactory.registerSubtype(classType, classType.getSimpleName());
-        }
-        return adapterFactory;
-    }
-    
-    
-    public static RuntimeTypeAdapterFactory<?> getContextRuntimeTypeAdapterFactory(String context, Class classContext)
-    {
-        RuntimeTypeAdapterFactory<?> adapterFactory = RuntimeTypeAdapterFactory.of(classContext, "type");
-        for(Class classType : ReflectionUtil.getSubClasses(classContext))
-        {
-            if(context.contains(classType.getSimpleName()))
-            {
-                adapterFactory.registerSubtype(classType, classType.getSimpleName());
-            }
-        }
-        return adapterFactory;
-    }
     
     
     public static HttpResponse sendPostRequestToJumboDinosaurs(PostRequest request)
