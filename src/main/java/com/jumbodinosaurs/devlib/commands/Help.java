@@ -7,7 +7,6 @@ public class Help extends CommandWithParameters
     public MessageResponse getExecutedMessage()
     {
         MessageResponse response = null;
-        //TODO Automate
         if(this.getParameters().size() > 0)
         {
             String identifier = this.getParameters().get(0).getParameter();
@@ -23,7 +22,7 @@ public class Help extends CommandWithParameters
             
             if(response == null)
             {
-                response = new MessageResponse("No Retention or Command Named: " + identifier);
+                response = new MessageResponse("No Command Named: " + identifier);
             }
             
         }
@@ -43,6 +42,6 @@ public class Help extends CommandWithParameters
     @Override
     public String getHelpMessage()
     {
-        return "Enter " + getCommand() + " followed by a command or retention to see the help/info message for that " + "command or retention.";
+        return "Enter " + getCommand() + " followed by a command to see the help message for that command";
     }
 }

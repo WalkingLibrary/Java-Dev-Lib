@@ -11,6 +11,7 @@ public abstract class CommandWithParameters extends Command
         return parameters;
     }
     
+    //TODO Switch to IParamable
     public void setParameters(ArrayList<Parameter> parameters)
     {
         this.parameters = parameters;
