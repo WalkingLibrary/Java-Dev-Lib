@@ -7,6 +7,29 @@ import java.util.ArrayList;
 
 public class CommandManager
 {
+    
+    private static ArrayList<Command> loadedCommands = new ArrayList<Command>();
+    
+    /*This command needs to be called once to capture the commands in the classpath*/
+    public static void refreshCommands()
+    {
+        ArrayList<Command> commands = new ArrayList<Command>();
+        for(Class classType : ReflectionUtil.getSubClasses(Command.class))
+        {
+            try
+            {
+                commands.add((Command) classType.newInstance());
+            }
+            catch(ReflectiveOperationException e)
+            {
+                e.printStackTrace();
+            }
+            
+        }
+        System.out.println("Commands Size: " + commands.size());
+        loadedCommands = commands;
+    }
+    
     public static MessageResponse filter(String input, boolean hasPrefix) throws WaveringParametersException
     {
         MessageResponse response = null;
@@ -32,20 +55,6 @@ public class CommandManager
     
     public static ArrayList<Command> getLoadedCommands()
     {
-        ArrayList<Command> commands = new ArrayList<Command>();
-        for(Class classType : ReflectionUtil.getSubClasses(Command.class))
-        {
-            try
-            {
-                commands.add((Command) classType.newInstance());
-            }
-            catch(ReflectiveOperationException e)
-            {
-                e.printStackTrace();
-            }
-    
-        }
-        System.out.println("Commands Size: " + commands.size());
-        return commands;
+        return loadedCommands;
     }
 }
