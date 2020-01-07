@@ -60,6 +60,11 @@ public class GsonUtil
              * we can create a JSON list from the Available subclasses
              * Format: ["JSON OBJECTS SEPARATED BY COMMAS HERE"]
              */
+            if(objectHolders == null)
+            {
+                return null;
+            }
+            
             String classPathContext = "[";
             for(ObjectHolder objectHolder : objectHolders)
             {
