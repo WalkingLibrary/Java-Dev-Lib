@@ -30,8 +30,17 @@ public class GeneralUtil
         int status = 400;
         try
         {
+            String certificatePath = "certificates/DSTRootCAx3.txt";
             File rootCA = resourceLoader.getResource("certificates/DSTRootCAx3.txt");
-            String certificate = scanFileContents(rootCA);
+            String certificate;
+            if(rootCA != null)
+            {
+                certificate = scanFileContents(rootCA);
+            }
+            else
+            {
+                certificate = resourceLoader.getResourceAsStream(certificatePath);
+            }
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
             ByteArrayInputStream bytes = new ByteArrayInputStream(certificate.getBytes());
             Certificate ca;
@@ -261,6 +270,28 @@ public class GeneralUtil
         try
         {
             Scanner input = new Scanner(file);
+            while(input.hasNextLine())
+            {
+                fileRequestedContents += input.nextLine();
+                fileRequestedContents += "\n";
+            }
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+            System.out.println("Error Reading File Contents");
+        }
+        return fileRequestedContents;
+    }
+    
+    //For Reading any file on the system
+    public static String scanStream(InputStream stream)
+    {
+        //Read File
+        String fileRequestedContents = "";
+        try
+        {
+            Scanner input = new Scanner(stream);
             while(input.hasNextLine())
             {
                 fileRequestedContents += input.nextLine();
