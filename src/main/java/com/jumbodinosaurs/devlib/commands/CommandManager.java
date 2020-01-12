@@ -36,10 +36,8 @@ public class CommandManager
         CommandParser parser = new CommandParser(input, hasPrefix);
         String command = parser.getCommand();
         ArrayList<Parameter> parameters = parser.getParameters();
-        System.out.println(command);
         for(Command consoleCommand : getLoadedCommands())
         {
-            System.out.println(consoleCommand.getCommand());
             if(consoleCommand.getCommand().toLowerCase().equals(command.toLowerCase().trim()))
             {
                 if(consoleCommand instanceof CommandWithParameters)
