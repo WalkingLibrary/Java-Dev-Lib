@@ -99,6 +99,41 @@ public class GeneralUtil
     }
     
     
+    public static File checkFor(File file, String name, boolean forceDir)
+    {
+        boolean needToMakeFile = true;
+        String[] contentsOfFile = file.list();
+        for(int i = 0; i < contentsOfFile.length; i++)
+        {
+            if(contentsOfFile.equals(name))
+            {
+                needToMakeFile = false;
+            }
+        }
+        
+        File neededFile = new File(file.getPath() + "/" + name);
+        if(needToMakeFile)
+        {
+            if(forceDir || name.indexOf(".") < 0)
+            {
+                neededFile.mkdir();
+            }
+            else
+            {
+                try
+                {
+                    neededFile.createNewFile();
+                }
+                catch(Exception e)
+                {
+                    System.out.println("Error Creating File");
+                }
+            }
+        }
+        return neededFile;
+    }
+    
+    
     /* @Function: Checks for the String name in the given Dir of File file
      * returns it and makes it if not there.
      *
