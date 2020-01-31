@@ -1,18 +1,10 @@
 package com.jumbodinosaurs.devlib.util;
 
 
-import com.google.gson.Gson;
-import com.jumbodinosaurs.devlib.util.objects.HttpResponse;
-import com.jumbodinosaurs.devlib.util.objects.PostRequest;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
-import java.io.*;
-import java.net.URL;
-import java.security.KeyStore;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -22,82 +14,6 @@ public class GeneralUtil
 {
     
     private static ResourceLoaderUtil resourceLoader = new ResourceLoaderUtil();
-    
-    
-    public static HttpResponse sendPostRequestToJumboDinosaurs(PostRequest request)
-    {
-        String response = "";
-        int status = 400;
-        try
-        {
-            String certificatePath = "certificates/DSTRootCAx3.txt";
-            File rootCA = resourceLoader.getResource("certificates/DSTRootCAx3.txt");
-            String certificate;
-            if(rootCA != null)
-            {
-                certificate = scanFileContents(rootCA);
-            }
-            else
-            {
-                certificate = resourceLoader.getResourceAsStream(certificatePath);
-            }
-            CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            ByteArrayInputStream bytes = new ByteArrayInputStream(certificate.getBytes());
-            Certificate ca;
-            try
-            {
-                ca = cf.generateCertificate(bytes);
-            }
-            catch(Exception e)
-            {
-                e.printStackTrace();
-                return new HttpResponse(status, response);
-            }
-            
-            // Create a KeyStore containing our trusted CAs
-            String keyStoreType = KeyStore.getDefaultType();
-            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
-            keyStore.load(null, null);
-            keyStore.setCertificateEntry("ca", ca);
-            
-            // Create a TrustManager that trusts the CAs in our KeyStore
-            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-            tmf.init(keyStore);
-            
-            // Create an SSLContext that uses our TrustManager
-            SSLContext context = SSLContext.getInstance("TLS");
-            context.init(null, tmf.getTrustManagers(), null);
-            
-            String url = "https://www.jumbodinosaurs.com/" + new Gson().toJson(request);
-            URL address = new URL(url);
-            HttpsURLConnection connection = (HttpsURLConnection) address.openConnection();
-            connection.setSSLSocketFactory(context.getSocketFactory());
-            connection.setRequestMethod("POST");
-            InputStream input;
-            status = connection.getResponseCode();
-            if(status == 200)
-            {
-                input = connection.getInputStream();
-            }
-            else
-            {
-                input = connection.getErrorStream();
-            }
-            
-            while(input.available() > 0)
-            {
-                response += (char) input.read();
-            }
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        
-        return new HttpResponse(status, response);
-    }
-    
     
     public static File checkFor(File file, String name, boolean forceDir)
     {
