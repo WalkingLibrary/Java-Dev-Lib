@@ -1,4 +1,4 @@
-package com.jumbodinosaurs.devlib.util.objects;
+package com.jumbodinosaurs.devlib.email;
 
 public class Email
 {

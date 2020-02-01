@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public class GeneralUtil
 {
-    
+    public static File userDir = new File(System.getProperty("user.dir"));
     private static ResourceLoaderUtil resourceLoader = new ResourceLoaderUtil();
     
     public static File checkFor(File file, String name, boolean forceDir)

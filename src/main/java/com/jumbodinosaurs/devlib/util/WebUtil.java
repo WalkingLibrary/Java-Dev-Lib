@@ -1,7 +1,7 @@
 package com.jumbodinosaurs.devlib.util;
 
 import com.google.gson.Gson;
-import com.jumbodinosaurs.devlib.util.objects.Email;
+import com.jumbodinosaurs.devlib.email.Email;
 import com.jumbodinosaurs.devlib.util.objects.HttpResponse;
 import com.jumbodinosaurs.devlib.util.objects.PostRequest;
 
