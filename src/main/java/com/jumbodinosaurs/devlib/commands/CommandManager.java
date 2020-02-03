@@ -26,7 +26,6 @@ public class CommandManager
             }
             
         }
-        System.out.println("Commands Size: " + commands.size());
         loadedCommands = commands;
     }
     
