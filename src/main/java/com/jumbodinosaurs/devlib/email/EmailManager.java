@@ -14,10 +14,16 @@ public class EmailManager
     private static File emailMemory;
     private static ArrayList<Email> emails;
     
-    private static void initializeEmails(File parentFile)
+    public static void initializeEmails(File parentFile)
     {
         emailDir = GeneralUtil.checkFor(parentFile, "Emails");
         emailMemory = GeneralUtil.checkFor(emailDir, "emails.json");
+        loadEmails();
+        if(emails == null)
+        {
+            emails = new ArrayList<Email>();
+        }
+        saveEmails();
         
     }
     
@@ -38,7 +44,7 @@ public class EmailManager
     }
     
     
-    private static ArrayList<Email> loadDomains()
+    private static ArrayList<Email> loadEmails()
     {
         ArrayList<Email> domains = new ArrayList<Email>();
         try
@@ -73,20 +79,16 @@ public class EmailManager
         throw new NoSuchEmailException("No Email with the Username of " + username);
     }
     
-    public static ArrayList<Email> getEmails()
-    {
-        return emails;
-    }
     
-    //Returns true if a domain was updated
-    public boolean updateDomain(Email updatedEmails)
+    //Returns true if a email was updated
+    public boolean updateEmail(Email updatedEmail)
     {
         for(Email email : emails)
         {
-            if(email.getUsername().equals(updatedEmails.getUsername()))
+            if(email.getUsername().equals(updatedEmail.getUsername()))
             {
                 emails.remove(email);
-                emails.add(updatedEmails);
+                emails.add(updatedEmail);
                 saveEmails();
                 return true;
             }
