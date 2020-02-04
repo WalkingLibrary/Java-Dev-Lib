@@ -79,6 +79,11 @@ public class EmailManager
         throw new NoSuchEmailException("No Email with the Username of " + username);
     }
     
+    public static ArrayList<Email> getEmails()
+    {
+        return emails;
+    }
+    
     
     //Returns true if a email was updated
     public boolean updateEmail(Email updatedEmail)
