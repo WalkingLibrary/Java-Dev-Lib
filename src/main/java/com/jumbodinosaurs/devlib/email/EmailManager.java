@@ -61,6 +61,18 @@ public class EmailManager
         return domains;
     }
     
+    public static Email getEmail(String username) throws NoSuchEmailException
+    {
+        for(Email email : emails)
+        {
+            if(email.getUsername().equals(username))
+            {
+                return email;
+            }
+        }
+        throw new NoSuchEmailException("No Email with the Username of " + username);
+    }
+    
     public static ArrayList<Email> getEmails()
     {
         return emails;
