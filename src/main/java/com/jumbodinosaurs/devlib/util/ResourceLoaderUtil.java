@@ -51,7 +51,7 @@ public class ResourceLoaderUtil
             while(entries.hasMoreElements())
             {
                 String name = entries.nextElement().getName();
-                if(name.startsWith(resourceDir + "/"))
+                if(name.startsWith(resourceDir + "/") && !name.equals(resourceDir + "/"))
                 { //filter according to the path
                     fileNames.add(name);
                 }
