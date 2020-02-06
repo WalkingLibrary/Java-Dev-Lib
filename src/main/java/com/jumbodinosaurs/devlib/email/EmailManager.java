@@ -1,5 +1,6 @@
 package com.jumbodinosaurs.devlib.email;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.jumbodinosaurs.devlib.util.GeneralUtil;
@@ -40,7 +41,7 @@ public class EmailManager
     
     private static void saveEmails(ArrayList<Email> emails)
     {
-        GsonUtil.saveObjectsToHolderList(emailMemory, emails, Email.class);
+        GeneralUtil.writeContents(emailMemory, new Gson().toJson(emails, Email.class), false);
     }
     
     
@@ -49,7 +50,7 @@ public class EmailManager
         ArrayList<Email> domains = new ArrayList<Email>();
         try
         {
-            domains = GsonUtil.readObjectHoldersList(emailMemory, Email.class, new TypeToken<ArrayList<Email>>() {});
+            domains = GsonUtil.readList(emailMemory, Email.class, new TypeToken<ArrayList<Email>>() {}, false);
         }
         catch(JsonParseException e)
         {
