@@ -22,9 +22,13 @@ public class ResourceLoaderUtil
         ArrayList<URL> urls = new ArrayList<>();
         try
         {
-            for(String fileName : listFiles(resourceDir))
+            for(String fileName : listResources(resourceDir))
             {
-                urls.add(getResource(fileName));
+                URL url = getResource(resourceDir + fileName);
+                if(url != null)
+                {
+                    urls.add(url);
+                }
             }
             return urls;
         }
@@ -35,7 +39,7 @@ public class ResourceLoaderUtil
     }
     
     //https://stackoverflow.com/questions/11012819/how-can-i-get-a-resource-folder-from-inside-my-jar-file
-    public ArrayList<String> listFiles(String resourceDir) throws IOException
+    public ArrayList<String> listResources(String resourceDir) throws IOException
     {
         File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
         ArrayList<String> fileNames = new ArrayList<String>();
@@ -48,7 +52,7 @@ public class ResourceLoaderUtil
                 String name = entries.nextElement().getName();
                 if(name.startsWith(resourceDir + "/"))
                 { //filter according to the path
-                    fileNames.add(resourceDir + "/" + name);
+                    fileNames.add("/" + name);
                 }
             }
             jar.close();
@@ -64,7 +68,7 @@ public class ResourceLoaderUtil
             {
                 for(File file : new File(getLoader().getResource(resourceDir).toURI()).listFiles())
                 {
-                    fileNames.add(resourceDir + "/" + file.getName());
+                    fileNames.add("/" + file.getName());
                 }
             }
             catch(URISyntaxException e)
