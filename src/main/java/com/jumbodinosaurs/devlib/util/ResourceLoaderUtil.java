@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
@@ -16,32 +17,31 @@ public class ResourceLoaderUtil
         return getClass().getClassLoader();
     }
     
-    public ArrayList<String> getScannedFiles(String resourceDir)
+    public ArrayList<URL> getURLS(String resourceDir) throws IOException
     {
-        ArrayList<String> files = new ArrayList<String>();
+        ArrayList<URL> urls = new ArrayList<>();
         try
         {
             for(String fileName : listFiles(resourceDir))
             {
-                System.out.println(fileName);
-                files.add(scanResource(fileName));
+                urls.add(getResource(fileName));
             }
-            return files;
+            return urls;
         }
         catch(IOException e)
         {
-            return null;
+            throw e;
         }
     }
     
     //https://stackoverflow.com/questions/11012819/how-can-i-get-a-resource-folder-from-inside-my-jar-file
     public ArrayList<String> listFiles(String resourceDir) throws IOException
     {
-        ArrayList<String> fileNames = new ArrayList<String>();
         File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
-        if(jarFile.isFile())
+        ArrayList<String> fileNames = new ArrayList<String>();
+        if(GeneralUtil.getType(jarFile).equals("jar") && jarFile.exists())
         {  // Run with JAR file
-            JarFile jar = new JarFile(jarFile);
+            JarFile jar = new JarFile(jarFile.getPath());
             Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
             while(entries.hasMoreElements())
             {
@@ -53,9 +53,13 @@ public class ResourceLoaderUtil
             }
             jar.close();
         }
+        else if(GeneralUtil.getType(jarFile).equals("jar"))
+        {//weird bug with intellij??
+            throw new IllegalStateException("Jar Exists but is not accessible");
+        }
         else
         { // Run with IDE
-    
+        
             try
             {
                 for(File file : new File(getLoader().getResource(resourceDir).toURI()).listFiles())
@@ -68,21 +72,21 @@ public class ResourceLoaderUtil
                 e.printStackTrace();
             }
         }
-        
-        for(String string : fileNames)
-        {
-            System.out.println("File Name: " + string);
-        }
         return fileNames;
     }
     
-    public InputStream getResource(String resourcePath)
+    public URL getResource(String resourcePath)
+    {
+        return getLoader().getResource(resourcePath);
+    }
+    
+    public InputStream getResourceAsStream(String resourcePath)
     {
         return getLoader().getResourceAsStream(resourcePath);
     }
     
     public String scanResource(String resourcePath)
     {
-        return GeneralUtil.scanStream(getResource(resourcePath));
+        return GeneralUtil.scanStream(getResourceAsStream(resourcePath));
     }
 }
