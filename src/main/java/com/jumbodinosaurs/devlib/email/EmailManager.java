@@ -41,7 +41,9 @@ public class EmailManager
     
     private static void saveEmails(ArrayList<Email> emails)
     {
-        GeneralUtil.writeContents(emailMemory, new Gson().toJson(emails, Email.class), false);
+        GeneralUtil.writeContents(emailMemory,
+                                  new Gson().toJson(emails, new TypeToken<ArrayList<Email>>() {}.getType()),
+                                  false);
     }
     
     
