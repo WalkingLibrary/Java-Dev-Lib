@@ -24,7 +24,8 @@ public class ResourceLoaderUtil
         {
             for(String fileName : listResources(resourceDir))
             {
-                URL url = getResource(resourceDir + fileName);
+                System.out.println(fileName);
+                URL url = getResource(fileName);
                 if(url != null)
                 {
                     urls.add(url);
@@ -52,7 +53,7 @@ public class ResourceLoaderUtil
                 String name = entries.nextElement().getName();
                 if(name.startsWith(resourceDir + "/"))
                 { //filter according to the path
-                    fileNames.add("/" + name);
+                    fileNames.add(name);
                 }
             }
             jar.close();
@@ -68,7 +69,7 @@ public class ResourceLoaderUtil
             {
                 for(File file : new File(getLoader().getResource(resourceDir).toURI()).listFiles())
                 {
-                    fileNames.add("/" + file.getName());
+                    fileNames.add(resourceDir + "/" + file.getName());
                 }
             }
             catch(URISyntaxException e)
