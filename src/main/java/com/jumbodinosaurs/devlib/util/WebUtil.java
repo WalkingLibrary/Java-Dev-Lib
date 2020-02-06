@@ -89,16 +89,9 @@ public class WebUtil
         String response = "";
         int status = 400;
         String certificatePath = "certificates/DSTRootCAx3.txt";
-        File rootCA = resourceLoader.getResource("certificates/DSTRootCAx3.txt");
         String certificate;
-        if(rootCA != null)
-        {
-            certificate = GeneralUtil.scanFileContents(rootCA);
-        }
-        else
-        {
-            certificate = resourceLoader.getResourceAsStream(certificatePath);
-        }
+        certificate = resourceLoader.scanResource(certificatePath);
+        
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
         ByteArrayInputStream bytes = new ByteArrayInputStream(certificate.getBytes());
         Certificate ca;

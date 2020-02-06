@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -17,15 +16,15 @@ public class ResourceLoaderUtil
         return getClass().getClassLoader();
     }
     
-    public List<File> getFiles(String resourceDir)
+    public ArrayList<String> getScannedFiles(String resourceDir)
     {
-        ArrayList<File> files = new ArrayList<File>();
+        ArrayList<String> files = new ArrayList<String>();
         try
         {
             for(String fileName : listFiles(resourceDir))
             {
                 System.out.println(fileName);
-                files.add(getResource(fileName));
+                files.add(scanResource(fileName));
             }
             return files;
         }
@@ -56,10 +55,17 @@ public class ResourceLoaderUtil
         }
         else
         { // Run with IDE
-            
-            for(File file : getResource(resourceDir).listFiles())
+    
+            try
             {
-                fileNames.add(resourceDir + "/" + file.getName());
+                for(File file : new File(getLoader().getResource(resourceDir).toURI()).listFiles())
+                {
+                    fileNames.add(resourceDir + "/" + file.getName());
+                }
+            }
+            catch(URISyntaxException e)
+            {
+                e.printStackTrace();
             }
         }
         
@@ -70,22 +76,13 @@ public class ResourceLoaderUtil
         return fileNames;
     }
     
-    public File getResource(String resourcePath)
+    public InputStream getResource(String resourcePath)
     {
-        try
-        {
-            return new File(getLoader().getResource(resourcePath).toURI());
-        }
-        catch(URISyntaxException e)
-        {
-            e.printStackTrace();
-        }
-        return null;
+        return getLoader().getResourceAsStream(resourcePath);
     }
     
-    public String getResourceAsStream(String resourcePath)
+    public String scanResource(String resourcePath)
     {
-        InputStream resourceStream = getLoader().getResourceAsStream(resourcePath);
-        return GeneralUtil.scanStream(resourceStream);
+        return GeneralUtil.scanStream(getResource(resourcePath));
     }
 }
