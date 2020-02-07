@@ -88,7 +88,7 @@ public class EmailManager
     }
     
     
-    public boolean removeEmail(Email emailToRemove)
+    public static boolean removeEmail(Email emailToRemove)
     {
         for(Email email : emails)
         {
