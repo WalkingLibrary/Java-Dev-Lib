@@ -14,7 +14,9 @@ import javax.mail.internet.MimeMessage;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.KeyStore;
@@ -40,14 +42,9 @@ public class WebUtil
         {
             connectionIn = connection.getErrorStream();
         }
-        
-        
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connectionIn));
-        String response = "";
-        while(bufferedReader.ready())
-        {
-            response += bufferedReader.readLine();
-        }
+    
+    
+        String response = GeneralUtil.scanStream(connectionIn);
         
         urlResponse = new HttpResponse(returnCode, response);
         
@@ -69,15 +66,8 @@ public class WebUtil
         {
             connectionIn = connection.getErrorStream();
         }
-        
-        
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connectionIn));
-        String response = "";
-        while(bufferedReader.ready())
-        {
-            response += bufferedReader.readLine();
-        }
-        
+    
+        String response = GeneralUtil.scanStream(connectionIn);
         urlResponse = new HttpResponse(returnCode, response);
         
         return urlResponse;

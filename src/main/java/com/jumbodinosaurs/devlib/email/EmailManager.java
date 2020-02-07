@@ -88,6 +88,20 @@ public class EmailManager
     }
     
     
+    public boolean removeEmail(Email emailToRemove)
+    {
+        for(Email email : emails)
+        {
+            if(email.getUsername().equals(emailToRemove.getUsername()))
+            {
+                emails.remove(email);
+                saveEmails();
+                return true;
+            }
+        }
+        return false;
+    }
+    
     //Returns true if a email was updated
     public boolean updateEmail(Email updatedEmail)
     {
