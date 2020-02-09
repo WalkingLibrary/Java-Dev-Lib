@@ -140,7 +140,6 @@ public class GsonUtil
     {
         
         RuntimeTypeAdapterFactory<?> adapterFactory = RuntimeTypeAdapterFactory.of(classContext, "type");
-        adapterFactory.registerSubtype(classContext, classContext.getSimpleName());
         for(Class classType : ReflectionUtil.getSubClasses(classContext))
         {
             adapterFactory.registerSubtype(classType, classType.getSimpleName());
@@ -152,7 +151,6 @@ public class GsonUtil
     public static RuntimeTypeAdapterFactory<?> getContextRuntimeTypeAdapterFactory(String context, Class classContext)
     {
         RuntimeTypeAdapterFactory<?> adapterFactory = RuntimeTypeAdapterFactory.of(classContext, "type");
-        adapterFactory.registerSubtype(classContext, classContext.getSimpleName());
         for(Class classType : ReflectionUtil.getSubClasses(classContext))
         {
             if(context.contains(classType.getSimpleName()))
