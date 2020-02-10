@@ -7,6 +7,7 @@ import com.jumbodinosaurs.devlib.util.GeneralUtil;
 import com.jumbodinosaurs.devlib.util.GsonUtil;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class EmailManager
@@ -41,9 +42,9 @@ public class EmailManager
     
     private static void saveEmails(ArrayList<Email> emails)
     {
-        GeneralUtil.writeContents(emailMemory,
-                                  new Gson().toJson(emails, new TypeToken<ArrayList<Email>>() {}.getType()),
-                                  false);
+        Type typeToken = new TypeToken<ArrayList<Email>>() {}.getType();
+        String emailsJsonized = new Gson().toJson(emails, typeToken);
+        GeneralUtil.writeContents(emailMemory, emailsJsonized, false);
     }
     
     
@@ -100,6 +101,11 @@ public class EmailManager
             }
         }
         return false;
+    }
+    
+    public static File getEmailMemory()
+    {
+        return emailMemory;
     }
     
     //Returns true if a email was updated
