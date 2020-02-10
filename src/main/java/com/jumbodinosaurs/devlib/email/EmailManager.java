@@ -48,27 +48,17 @@ public class EmailManager
     }
     
     
-    private static ArrayList<Email> loadEmails()
+    private static void loadEmails()
     {
-        ArrayList<Email> domains = new ArrayList<Email>();
         try
         {
-            domains = GsonUtil.readList(emailMemory, Email.class, new TypeToken<ArrayList<Email>>() {}, false);
+            emails = GsonUtil.readList(emailMemory, Email.class, new TypeToken<ArrayList<Email>>() {}, false);
         }
         catch(JsonParseException e)
         {
             e.printStackTrace();
             throw new IllegalStateException("Email Data is Not Loadable");
         }
-        
-        /*
-        Polymorphism Type Setting
-        for(Email email : emails)
-        {
-            email.setType(email.getClass().getSimpleName());
-        }
-        */
-        return domains;
     }
     
     public static Email getEmail(String username) throws NoSuchEmailException
