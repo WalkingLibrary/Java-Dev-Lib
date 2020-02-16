@@ -56,4 +56,9 @@ public class OptionsManager
         }
         saveOptions();
     }
+    
+    public ArrayList<Option> getOptions()
+    {
+        return options;
+    }
 }
