@@ -23,7 +23,23 @@ public class OptionsManager
         }
     }
     
-    public Option getOption(String identifier) throws NoSuchOptionException
+    public <E> Option<E> getOption(String identifier, E defaultValue)
+    {
+        try
+        {
+            Option<E> option = getOption(identifier);
+            return option;
+        }
+        catch(NoSuchOptionException e)
+        {
+            Option<E> defaultOption = new Option<E>(defaultValue, identifier);
+            setOption(defaultOption);
+            return defaultOption;
+        }
+    }
+    
+    
+    private Option getOption(String identifier) throws NoSuchOptionException
     {
         for(Option option : options)
         {
