@@ -1,13 +1,16 @@
 package com.jumbodinosaurs.devlib.util;
 
+import com.jumbodinosaurs.devlib.util.exceptions.NoJarFileException;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.JarFile;
 
 
 public class ReflectionUtil
@@ -92,5 +95,16 @@ public class ReflectionUtil
             e.printStackTrace();
         }
         return new ArrayList<Class>();
+    }
+    
+    public static String getCodeExePath()
+    {
+        return ReflectionUtil.class.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+    }
+    
+    public static JarFile reflectJarFile() throws IOException, NoJarFileException
+    {
+        ResourceLoaderUtil loaderUtil = new ResourceLoaderUtil();
+        return loaderUtil.loadJarFile(getCodeExePath());
     }
 }

@@ -50,6 +50,19 @@ public class CommandManager
         return response;
     }
     
+    public static ArrayList<String> getCategories()
+    {
+        ArrayList<String> commandCategories = new ArrayList<String>();
+        for(Command command : getLoadedCommands())
+        {
+            if(!commandCategories.contains(command.getCategory()))
+            {
+                commandCategories.add(command.getCategory());
+            }
+        }
+        return commandCategories;
+    }
+    
     public static ArrayList<Command> getLoadedCommands()
     {
         return loadedCommands;

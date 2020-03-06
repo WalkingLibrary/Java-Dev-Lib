@@ -29,9 +29,16 @@ public class Help extends CommandWithParameters
         else
         {
             String commandsToList = "Commands:";
-            for(Command command : CommandManager.getLoadedCommands())
+            for(String category : CommandManager.getCategories())
             {
-                commandsToList += "\n" + command.getCommand();
+                System.out.println(category + ":");
+                for(Command command : CommandManager.getLoadedCommands())
+                {
+                    if(command.getCategory().equals(category))
+                    {
+                        commandsToList += "\n" + command.getCommand();
+                    }
+                }
             }
             response = new MessageResponse(commandsToList);
         }

@@ -11,6 +11,11 @@ public abstract class Command
         return getClass().getSimpleName();
     }
     
+    public String getCategory()
+    {
+        return "General";
+    }
+    
     public abstract MessageResponse getExecutedMessage() throws WaveringParametersException;
     
     public abstract String getHelpMessage();

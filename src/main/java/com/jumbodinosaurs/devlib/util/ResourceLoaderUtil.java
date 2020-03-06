@@ -1,5 +1,7 @@
 package com.jumbodinosaurs.devlib.util;
 
+import com.jumbodinosaurs.devlib.util.exceptions.NoJarFileException;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,15 +41,32 @@ public class ResourceLoaderUtil
         }
     }
     
+    public JarFile loadJarFile(String filePath) throws IOException, NoJarFileException
+    {
+        File jarFile = new File(filePath);
+        if(GeneralUtil.getType(jarFile).equals("jar") && jarFile.exists())
+        {
+            try
+            {
+                return new JarFile(jarFile.getPath());
+            }
+            catch(IOException e)
+            {
+                throw e;
+            }
+        }
+        throw new NoJarFileException("No Jar File found (Dev Environment?)");
+    }
+    
     //https://stackoverflow.com/questions/11012819/how-can-i-get-a-resource-folder-from-inside-my-jar-file
     public ArrayList<String> listResources(String resourceDir) throws IOException
     {
-        File jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
         ArrayList<String> fileNames = new ArrayList<String>();
-        if(GeneralUtil.getType(jarFile).equals("jar") && jarFile.exists())
-        {  // Run with JAR file
-            JarFile jar = new JarFile(jarFile.getPath());
-            Enumeration<JarEntry> entries = jar.entries(); //gives ALL entries in jar
+        String codePath = ReflectionUtil.getCodeExePath();
+        try
+        {
+            JarFile jarFile = loadJarFile(codePath);
+            Enumeration<JarEntry> entries = jarFile.entries(); //gives ALL entries in jar
             while(entries.hasMoreElements())
             {
                 String name = entries.nextElement().getName();
@@ -56,27 +75,32 @@ public class ResourceLoaderUtil
                     fileNames.add(name);
                 }
             }
-            jar.close();
+            jarFile.close();
         }
-        else if(GeneralUtil.getType(jarFile).equals("jar"))
-        {//weird bug with intellij??
-            throw new IllegalStateException("Jar Exists but is not accessible");
-        }
-        else
-        { // Run with IDE
-        
-            try
-            {
-                for(File file : new File(getLoader().getResource(resourceDir).toURI()).listFiles())
+        catch(NoJarFileException e)
+        {
+            File codeFile = new File(codePath);
+            if(GeneralUtil.getType(codeFile).equals("jar"))
+            {//weird bug with intellij??
+                throw new IllegalStateException("Jar Exists but is not accessible");
+            }
+            else
+            { // Run with IDE
+            
+                try
                 {
-                    fileNames.add(resourceDir + "/" + file.getName());
+                    for(File file : new File(getLoader().getResource(resourceDir).toURI()).listFiles())
+                    {
+                        fileNames.add(resourceDir + "/" + file.getName());
+                    }
+                }
+                catch(URISyntaxException ex)
+                {
+                    ex.printStackTrace();
                 }
             }
-            catch(URISyntaxException e)
-            {
-                e.printStackTrace();
-            }
         }
+        
         return fileNames;
     }
     
