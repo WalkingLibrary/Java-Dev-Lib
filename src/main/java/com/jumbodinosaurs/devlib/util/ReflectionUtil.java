@@ -99,7 +99,8 @@ public class ReflectionUtil
     
     public static String getCodeExePath()
     {
-        return ReflectionUtil.class.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+        ResourceLoaderUtil resourceLoaderUtil = new ResourceLoaderUtil();
+        return resourceLoaderUtil.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
     }
     
     public static JarFile reflectJarFile() throws IOException, NoJarFileException
