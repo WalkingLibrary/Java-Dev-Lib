@@ -109,8 +109,8 @@ public class WebUtil
         // Create an SSLContext that uses our TrustManager
         SSLContext context = SSLContext.getInstance("TLS");
         context.init(null, tmf.getTrustManagers(), null);
-        
-        String url = "https://www.jumbodinosaurs.com/" + new Gson().toJson(request);
+    
+        String url = "https://jumbodinosaurs.com/" + new Gson().toJson(request);
         URL address = new URL(url);
         HttpsURLConnection connection = (HttpsURLConnection) address.openConnection();
         connection.setSSLSocketFactory(context.getSocketFactory());

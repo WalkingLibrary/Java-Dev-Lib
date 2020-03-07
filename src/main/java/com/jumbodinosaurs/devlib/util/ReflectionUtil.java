@@ -1,6 +1,7 @@
 package com.jumbodinosaurs.devlib.util;
 
 import com.jumbodinosaurs.devlib.util.exceptions.NoJarFileException;
+import com.jumbodinosaurs.devlib.util.exceptions.NoSuchJarAttribute;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;
@@ -10,6 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 
 
@@ -107,5 +109,24 @@ public class ReflectionUtil
     {
         ResourceLoaderUtil loaderUtil = new ResourceLoaderUtil();
         return loaderUtil.loadJarFile(getCodeExePath());
+    }
+    
+    public static String getAttribute(String key) throws NoSuchJarAttribute
+    {
+        try
+        {
+            JarFile reflectedJar = reflectJarFile();
+            Attributes attributes = reflectedJar.getManifest().getMainAttributes();
+            if(attributes.getValue(key) != null)
+            {
+                return attributes.getValue(key);
+            }
+            throw new NoSuchJarAttribute("No Jar Attribute found matching " + key);
+        }
+        catch(Exception e)
+        {
+            throw new NoSuchJarAttribute(e.getMessage());
+        }
+        
     }
 }
