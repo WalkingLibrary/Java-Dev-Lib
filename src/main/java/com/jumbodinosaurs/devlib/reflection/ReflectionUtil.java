@@ -1,7 +1,7 @@
-package com.jumbodinosaurs.devlib.util;
+package com.jumbodinosaurs.devlib.reflection;
 
-import com.jumbodinosaurs.devlib.util.exceptions.NoJarFileException;
-import com.jumbodinosaurs.devlib.util.exceptions.NoSuchJarAttribute;
+import com.jumbodinosaurs.devlib.reflection.exceptions.NoJarFileException;
+import com.jumbodinosaurs.devlib.reflection.exceptions.NoSuchJarAttribute;
 import io.github.classgraph.ClassGraph;
 import io.github.classgraph.ClassInfoList;
 import io.github.classgraph.ScanResult;

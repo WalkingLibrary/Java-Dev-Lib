@@ -1,6 +1,7 @@
-package com.jumbodinosaurs.devlib.util;
+package com.jumbodinosaurs.devlib.reflection;
 
-import com.jumbodinosaurs.devlib.util.exceptions.NoJarFileException;
+import com.jumbodinosaurs.devlib.reflection.exceptions.NoJarFileException;
+import com.jumbodinosaurs.devlib.util.GeneralUtil;
 
 import java.io.File;
 import java.io.IOException;

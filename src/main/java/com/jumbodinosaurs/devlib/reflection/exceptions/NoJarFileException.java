@@ -1,4 +1,4 @@
-package com.jumbodinosaurs.devlib.util.exceptions;
+package com.jumbodinosaurs.devlib.reflection.exceptions;
 
 public class NoJarFileException extends Exception
 {

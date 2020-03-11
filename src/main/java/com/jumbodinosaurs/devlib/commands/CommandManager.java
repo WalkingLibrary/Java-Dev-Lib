@@ -1,7 +1,7 @@
 package com.jumbodinosaurs.devlib.commands;
 
 import com.jumbodinosaurs.devlib.commands.exceptions.WaveringParametersException;
-import com.jumbodinosaurs.devlib.util.ReflectionUtil;
+import com.jumbodinosaurs.devlib.reflection.ReflectionUtil;
 
 import java.util.ArrayList;
 

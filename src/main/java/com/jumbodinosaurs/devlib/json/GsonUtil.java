@@ -1,10 +1,12 @@
-package com.jumbodinosaurs.devlib.util;
+package com.jumbodinosaurs.devlib.json;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.google.typeadapters.gson.RuntimeTypeAdapterFactory;
+import com.jumbodinosaurs.devlib.reflection.ReflectionUtil;
+import com.jumbodinosaurs.devlib.util.GeneralUtil;
 import com.jumbodinosaurs.devlib.util.objects.ObjectHolder;
 
 import java.io.File;

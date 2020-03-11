@@ -3,8 +3,8 @@ package com.jumbodinosaurs.devlib.email;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
+import com.jumbodinosaurs.devlib.json.GsonUtil;
 import com.jumbodinosaurs.devlib.util.GeneralUtil;
-import com.jumbodinosaurs.devlib.util.GsonUtil;
 
 import java.io.File;
 import java.lang.reflect.Type;
