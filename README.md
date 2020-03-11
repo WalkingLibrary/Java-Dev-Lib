@@ -9,6 +9,16 @@ Have you Ever Written Code So Good You use it again? Same, but if I did I'd put 
 
   - jumbodinosaurs.com Support
   - java reflection help
+  - command system
+  - email manager
+  - options manager
+  - GSON/JSON tools
+  - web tools
+
+#TODOS
+ - add Version System
+ - add Task System
+ - add Shell Script Execution System
 
 ### Gradle
 
