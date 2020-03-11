@@ -15,7 +15,12 @@ buildscript {
 
 
 
-
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://jitpack.io' }
+    }
+}
 
 apply plugin: 'java'
 apply plugin: 'idea'
@@ -30,8 +35,6 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-    jcenter()
-    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
