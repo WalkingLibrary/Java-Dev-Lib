@@ -28,7 +28,7 @@ public class TaskUtil
     
     public static ArrayList<ScheduledTask> getScheduledTasks(ScheduledThreadPoolExecutor executor)
     {
-        ArrayList<Class> startUpTaskClasses = ReflectionUtil.getSubClasses(StartUpTask.class);
+        ArrayList<Class> startUpTaskClasses = ReflectionUtil.getSubClasses(ScheduledTask.class);
         ArrayList<ScheduledTask> startUpTasks = new ArrayList<ScheduledTask>();
         for(Class classType : startUpTaskClasses)
         {
