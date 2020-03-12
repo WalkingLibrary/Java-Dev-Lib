@@ -7,7 +7,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 public class TaskUtil
 {
-    public ArrayList<StartUpTask> getStartUpTasks()
+    public static ArrayList<StartUpTask> getStartUpTasks()
     {
         ArrayList<Class> startUpTaskClasses = ReflectionUtil.getSubClasses(StartUpTask.class);
         ArrayList<StartUpTask> startUpTasks = new ArrayList<StartUpTask>();
@@ -26,7 +26,7 @@ public class TaskUtil
     }
     
     
-    public ArrayList<ScheduledTask> getScheduledTasks(ScheduledThreadPoolExecutor executor)
+    public static ArrayList<ScheduledTask> getScheduledTasks(ScheduledThreadPoolExecutor executor)
     {
         ArrayList<Class> startUpTaskClasses = ReflectionUtil.getSubClasses(StartUpTask.class);
         ArrayList<ScheduledTask> startUpTasks = new ArrayList<ScheduledTask>();
