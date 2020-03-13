@@ -3,10 +3,7 @@ package com.jumbodinosaurs.devlib.util;
 
 import com.jumbodinosaurs.devlib.reflection.ResourceLoaderUtil;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -237,26 +234,31 @@ public class GeneralUtil
         return fileRequestedContents;
     }
     
-    //For Reading any file on the system
-    public static String scanStream(InputStream stream)
+    
+    public static String scanStream(InputStream stream, String delimiter)
     {
-        //Read File
-        String fileRequestedContents = "";
+        String inputStreamContents = "";
         try
         {
             Scanner input = new Scanner(stream);
-            while(input.hasNextLine())
+            input.useDelimiter(delimiter);
+            while(input.hasNext())
             {
-                fileRequestedContents += input.nextLine();
-                fileRequestedContents += "\n";
+                inputStreamContents += input.next();
+                inputStreamContents += delimiter;
             }
         }
         catch(Exception e)
         {
             e.printStackTrace();
-            System.out.println("Error Reading File Contents");
+            System.out.println("Error Reading Stream Contents");
         }
-        return fileRequestedContents;
+        return inputStreamContents;
+    }
+    
+    public static String scanStream(InputStream stream)
+    {
+        return scanStream(stream, "\n");
     }
     
     public static File[] listFilesRecursive(File directory)
@@ -279,6 +281,52 @@ public class GeneralUtil
             filesToReturn[i] = files.get(i);
         }
         return filesToReturn;
+    }
+    
+    
+    public static String execute(String command, ArrayList<String> arguments, File executionDir) throws IOException
+    {
+        if(arguments != null && arguments.size() != 0)
+        {
+            for(String argument : arguments)
+            {
+                command += " " + argument;
+            }
+        }
+        
+        System.out.println("Executing Command:\n\n" + command + "\n");
+        
+        Process process;
+        if(executionDir == null)
+        {
+            process = Runtime.getRuntime().exec(command);
+        }
+        else
+        {
+            process = Runtime.getRuntime().exec(command, null, executionDir);
+        }
+        
+        
+        String processOutput = GeneralUtil.scanStream(process.getInputStream(), "\n");
+        String processErrorOutput = GeneralUtil.scanStream(process.getErrorStream(), "\n");
+        
+        
+        String returnOutput = "";
+        
+        if(!processOutput.equals(""))
+        {
+            returnOutput += "Process Output:\n\n";
+            returnOutput += processOutput + "\n\n";
+        }
+        
+        if(!processErrorOutput.equals(""))
+        {
+            returnOutput += "Error Output:" + "\n\nn";
+            returnOutput += processErrorOutput;
+        }
+        return returnOutput;
+        
+        
     }
     
 }
