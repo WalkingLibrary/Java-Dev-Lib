@@ -283,7 +283,8 @@ public class GeneralUtil
         return filesToReturn;
     }
     
-    
+    ////https://www.codejava.net/java-se/file-io/execute-operating-system-commands-using-runtime-exec-methods
+    // This Function is for running commands via the console/command prompt
     public static String execute(String command, ArrayList<String> arguments, File executionDir) throws IOException
     {
         if(arguments != null && arguments.size() != 0)
@@ -293,8 +294,8 @@ public class GeneralUtil
                 command += " " + argument;
             }
         }
-        
-        System.out.println("Executing Command:\n\n" + command + "\n");
+    
+        System.out.println("Executing Command:\n" + command + "\n");
         
         Process process;
         if(executionDir == null)
@@ -309,9 +310,9 @@ public class GeneralUtil
         
         String processOutput = GeneralUtil.scanStream(process.getInputStream(), "\n");
         String processErrorOutput = GeneralUtil.scanStream(process.getErrorStream(), "\n");
-        
-        
-        String returnOutput = "";
+    
+    
+        String returnOutput = "--------------------------------------\n";
         
         if(!processOutput.equals(""))
         {
@@ -321,9 +322,11 @@ public class GeneralUtil
         
         if(!processErrorOutput.equals(""))
         {
-            returnOutput += "Error Output:" + "\n\nn";
+            returnOutput += "Error Output:" + "\n\n";
             returnOutput += processErrorOutput;
         }
+    
+        returnOutput += "--------------------------------------\n\n";
         return returnOutput;
         
         
