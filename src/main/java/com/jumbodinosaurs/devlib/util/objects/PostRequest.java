@@ -1,4 +1,4 @@
-package com.jumbodinosaurs.devlib.util.objects;
+package com.jumbodinosaurs.objects;
 
 public class PostRequest
 {
@@ -13,42 +13,20 @@ public class PostRequest
     private String emailCode;
     private String listName;
     private String connectionName;
+    private String queryRequest;
     
     public PostRequest()
     {
     
     }
     
-    public PostRequest(String username,
-                       String password,
-                       String email,
-                       String token,
-                       String path,
-                       String command,
-                       String content,
-                       String captchaCode,
-                       String emailCode,
-                       String listName,
-                       String connectionName)
-    {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.token = token;
-        this.path = path;
-        this.command = command;
-        this.content = content;
-        this.captchaCode = captchaCode;
-        this.emailCode = emailCode;
-        this.listName = listName;
-        this.connectionName = connectionName;
-    }
     
-    
-    @Override
-    public String toString()
+    public PostRequest getCensored()
     {
-        return "PostRequest{" + "username='" + username + '\'' + ", password='" + password + '\'' + ", email='" + email + '\'' + ", token='" + token + '\'' + ", path='" + path + '\'' + ", command='" + command + '\'' + ", content='" + content + '\'' + ", captchaCode='" + captchaCode + '\'' + ", emailCode='" + emailCode + '\'' + '}';
+        PostRequest censored = this;
+        censored.setPassword("");
+        censored.setToken("");
+        return censored;
     }
     
     public String getUsername()
@@ -159,5 +137,22 @@ public class PostRequest
     public void setConnectionName(String connectionName)
     {
         this.connectionName = connectionName;
+    }
+    
+    
+    public String getQueryRequest()
+    {
+        return queryRequest;
+    }
+    
+    public void setQueryRequest(String queryRequest)
+    {
+        this.queryRequest = queryRequest;
+    }
+    
+    @Override
+    public String toString()
+    {
+        return "PostRequest{" + "username='" + username + '\'' + ", password='" + password + '\'' + ", email='" + email + '\'' + ", token='" + token + '\'' + ", path='" + path + '\'' + ", command='" + command + '\'' + ", content='" + content + '\'' + ", captchaCode='" + captchaCode + '\'' + ", emailCode='" + emailCode + '\'' + ", listName='" + listName + '\'' + ", connectionName='" + connectionName + '\'' + ", queryRequest=" + queryRequest + '}';
     }
 }
