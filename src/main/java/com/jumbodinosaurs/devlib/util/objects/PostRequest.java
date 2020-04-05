@@ -1,4 +1,4 @@
-package com.jumbodinosaurs.objects;
+package com.jumbodinosaurs.devlib.util.objects;
 
 public class PostRequest
 {

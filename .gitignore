@@ -4,3 +4,7 @@ bin
 .settings
 .project
 .classpath
+/.idea/
+/gradle/wrapper/
+/gradlew
+/gradlew.bat
