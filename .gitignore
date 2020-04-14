@@ -8,3 +8,4 @@ bin
 /gradle/wrapper/
 /gradlew
 /gradlew.bat
+/src/test/
