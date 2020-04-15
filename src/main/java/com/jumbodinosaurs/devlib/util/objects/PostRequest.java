@@ -10,24 +10,12 @@ public class PostRequest
     private String command;
     private String content;
     private String captchaCode;
-    private String emailCode;
-    private String listName;
-    private String connectionName;
-    private String queryRequest;
     
     public PostRequest()
     {
     
     }
     
-    
-    public PostRequest getCensored()
-    {
-        PostRequest censored = this;
-        censored.setPassword("");
-        censored.setToken("");
-        return censored;
-    }
     
     public String getUsername()
     {
@@ -109,50 +97,18 @@ public class PostRequest
         this.captchaCode = captchaCode;
     }
     
-    public String getEmailCode()
-    {
-        return emailCode;
-    }
-    
-    public void setEmailCode(String emailCode)
-    {
-        this.emailCode = emailCode;
-    }
-    
-    public String getListName()
-    {
-        return listName;
-    }
-    
-    public void setListName(String listName)
-    {
-        this.listName = listName;
-    }
-    
-    public String getConnectionName()
-    {
-        return connectionName;
-    }
-    
-    public void setConnectionName(String connectionName)
-    {
-        this.connectionName = connectionName;
-    }
-    
-    
-    public String getQueryRequest()
-    {
-        return queryRequest;
-    }
-    
-    public void setQueryRequest(String queryRequest)
-    {
-        this.queryRequest = queryRequest;
-    }
-    
     @Override
     public String toString()
     {
-        return "PostRequest{" + "username='" + username + '\'' + ", password='" + password + '\'' + ", email='" + email + '\'' + ", token='" + token + '\'' + ", path='" + path + '\'' + ", command='" + command + '\'' + ", content='" + content + '\'' + ", captchaCode='" + captchaCode + '\'' + ", emailCode='" + emailCode + '\'' + ", listName='" + listName + '\'' + ", connectionName='" + connectionName + '\'' + ", queryRequest=" + queryRequest + '}';
+        return "PostRequest{" +
+                       "username='" + username + '\'' +
+                       ", password='" + password + '\'' +
+                       ", email='" + email + '\'' +
+                       ", token='" + token + '\'' +
+                       ", path='" + path + '\'' +
+                       ", command='" + command + '\'' +
+                       ", content='" + content + '\'' +
+                       ", captchaCode='" + captchaCode + '\'' +
+                       '}';
     }
 }
