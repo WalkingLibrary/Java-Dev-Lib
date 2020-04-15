@@ -3,7 +3,7 @@ package com.jumbodinosaurs.devlib.database;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
-import com.jumbodinosaurs.database.exceptions.WrongStorageFormatException;
+import com.jumbodinosaurs.devlib.database.exceptions.WrongStorageFormatException;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -31,8 +31,7 @@ public class DataBaseUtil
     
     public static <E> ArrayList<E> getObjectsDataBase(Query query,
                                                       DataBase dataBase,
-                                                      TypeToken<E> typeToken) throws SQLException,
-                                                                                             WrongStorageFormatException
+                                                      TypeToken<E> typeToken) throws SQLException, WrongStorageFormatException
     {
         queryDataBase(query, dataBase);
         ArrayList<E> objects = new ArrayList<E>();
@@ -57,15 +56,15 @@ public class DataBaseUtil
         String oldObjectJson = new Gson().toJson(objectOld);
         String newObjectJson = new Gson().toJson(objectNew);
         String statement = "UPDATE " + table;
-        statement += " SET " + objectColumnName + " = \'" + newObjectJson + "\'";
-        statement += " WHERE " + objectColumnName + " = CAST(\'" + oldObjectJson + "\' AS JSON);";
+        statement += " SET " + objectColumnName + " = '" + newObjectJson + "'";
+        statement += " WHERE " + objectColumnName + " = CAST('" + oldObjectJson + "' AS JSON);";
         return new Query(statement);
     }
     
     public static <E> Query getInsertQuery(String table, E object)
     {
         String objectJson = new Gson().toJson(object);
-        String statement = "INSERT INTO " + table + "(" + objectColumnName + ") VALUES(\'" + objectJson + "\');";
+        String statement = "INSERT INTO " + table + "(" + objectColumnName + ") VALUES('" + objectJson + "');";
         System.out.println(statement);
         return new Query(statement);
     }

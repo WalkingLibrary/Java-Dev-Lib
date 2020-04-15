@@ -3,7 +3,7 @@ package com.jumbodinosaurs.devlib.database;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
-import com.jumbodinosaurs.database.exceptions.NoSuchDataBaseException;
+import com.jumbodinosaurs.devlib.database.exceptions.NoSuchDataBaseException;
 import com.jumbodinosaurs.devlib.json.GsonUtil;
 import com.jumbodinosaurs.devlib.util.GeneralUtil;
 

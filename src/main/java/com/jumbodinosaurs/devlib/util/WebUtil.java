@@ -5,6 +5,11 @@ import com.jumbodinosaurs.devlib.email.Email;
 import com.jumbodinosaurs.devlib.reflection.ResourceLoaderUtil;
 import com.jumbodinosaurs.devlib.util.objects.HttpResponse;
 import com.jumbodinosaurs.devlib.util.objects.PostRequest;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -15,6 +20,7 @@ import javax.mail.internet.MimeMessage;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
+import javax.swing.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -136,6 +142,7 @@ public class WebUtil
     
     
     //https://dzone.com/articles/sending-mail-using-javamail-api-for-gmail-server
+    //https://www.geeksforgeeks.org/sending-email-java-ssltls-authentication/
     public static void sendEmail(Email email,
                                  String userEmailAddress,
                                  String topic,
@@ -143,12 +150,10 @@ public class WebUtil
     {
         //Setting up configurations for the email connection to the Google SMTP server using TLS
         Properties props = new Properties();
-        props.put("mail.smtp.host", "true");
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
         props.put("mail.smtp.port", "587");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         //Establishing a session with required user details
         javax.mail.Session session = javax.mail.Session.getInstance(props, new javax.mail.Authenticator()
@@ -162,20 +167,43 @@ public class WebUtil
         
         //Creating a Message object to set the email content
         MimeMessage msg = new MimeMessage(session);
-        //Storing the comma separated values to email addresses
-        String to = userEmailAddress;
-                /*Parsing the String with default delimiter as a comma by marking the boolean as true and storing the email
+        /*Parsing the String with default delimiter as a comma by marking the boolean as true and storing the email
                 addresses in an array of InternetAddress objects*/
-        InternetAddress[] address = InternetAddress.parse(to, true);
+        InternetAddress[] address = InternetAddress.parse(userEmailAddress, true);
         //Setting the recipients from the address variable
         msg.setRecipients(Message.RecipientType.TO, address);
-        
+    
         msg.setSubject(topic);
         msg.setSentDate(new Date());
         msg.setText(message);
         msg.setHeader("XPriority", "1");
         Transport.send(msg);
+    
+    
+    }
+    
+    public static void loadWebPage(String url)
+    {
         
+        final JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.setSize(620, 440);
+        final JFXPanel fxpanel = new JFXPanel();
+        frame.add(fxpanel);
+        
+        Platform.runLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                WebEngine engine;
+                WebView wv = new WebView();
+                engine = wv.getEngine();
+                fxpanel.setScene(new Scene(wv));
+                engine.load(url);
+            }
+        });
+        frame.setVisible(true);
         
     }
 }
