@@ -84,9 +84,23 @@ public class DataBaseManager
         throw new NoSuchDataBaseException("Could not find a DataBase Named " + name);
     }
     
+    public static boolean removeDataBase(String name)
+    {
+        for(DataBase dataBase: dataBases)
+        {
+            if(dataBase.getDataBaseName().equals(name))
+            {
+                saveDataBases();
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    
     public static boolean updateDataBase(DataBase dataBase)
     {
-        /*Returns true if the database was updated*/
+        /* Returns true if the database was updated */
         for(DataBase storedDataBase : dataBases)
         {
             if(dataBase.equals(storedDataBase))
