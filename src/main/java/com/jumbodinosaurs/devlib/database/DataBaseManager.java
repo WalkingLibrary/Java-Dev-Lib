@@ -52,7 +52,7 @@ public class DataBaseManager
     
     public static void saveDataBases(ArrayList<DataBase> dataBases)
     {
-        Type typeToken = new TypeToken<DataBase>() {}.getType();
+        Type typeToken = new TypeToken<ArrayList<DataBase>>() {}.getType();
         String dataBasesJsonized = new Gson().toJson(dataBases, typeToken);
         GeneralUtil.writeContents(dataBaseMemory, dataBasesJsonized, false);
     }
