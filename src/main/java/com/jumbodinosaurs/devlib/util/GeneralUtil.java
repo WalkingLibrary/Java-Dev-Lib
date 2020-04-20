@@ -7,6 +7,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class GeneralUtil
@@ -330,6 +332,20 @@ public class GeneralUtil
         return returnOutput;
         
         
+    }
+    
+    public static StringBuffer replaceUnicodeCharacters(String data)
+    {
+        Pattern pattern = Pattern.compile("\\\\u(\\p{XDigit}{4})");
+        Matcher matcher = pattern.matcher(data);
+        StringBuffer buf = new StringBuffer(data.length());
+        while(matcher.find())
+        {
+            String ch = String.valueOf((char) Integer.parseInt(matcher.group(1), 16));
+            matcher.appendReplacement(buf, Matcher.quoteReplacement(ch));
+        }
+        matcher.appendTail(buf);
+        return buf;
     }
     
 }
