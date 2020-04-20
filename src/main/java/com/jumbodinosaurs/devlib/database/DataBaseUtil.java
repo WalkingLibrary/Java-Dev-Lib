@@ -1,6 +1,7 @@
 package com.jumbodinosaurs.devlib.database;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.jumbodinosaurs.devlib.database.exceptions.WrongStorageFormatException;
@@ -63,7 +64,9 @@ public class DataBaseUtil
     
     public static <E> Query getInsertQuery(String table, E object)
     {
-        String objectJson = new Gson().toJson(object);
+        //https://github.com/google/gson/issues/203
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        String objectJson = gson.toJson(object);
         String statement = "INSERT INTO " + table + "(" + objectColumnName + ") VALUES('" + objectJson + "');";
         System.out.println(statement);
         return new Query(statement);
