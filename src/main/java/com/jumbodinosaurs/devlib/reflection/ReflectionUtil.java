@@ -63,7 +63,7 @@ public class ReflectionUtil
          */
     
         //Scan the Runtime Environment
-        try(ScanResult scanResult = new ClassGraph().enableAllInfo().scan())
+        try(ScanResult scanResult = new ClassGraph().enableClassInfo().scan())
         {
             //Get all SubClass Instances of the Given classTypePattern
             ClassInfoList controlClasses = scanResult.getSubclasses(classTypePattern.getCanonicalName());
