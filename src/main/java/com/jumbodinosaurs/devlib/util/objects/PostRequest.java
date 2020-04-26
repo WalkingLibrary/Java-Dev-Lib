@@ -6,6 +6,7 @@ public class PostRequest
     private String password;
     private String email;
     private String token;
+    private String tokenUse;
     private String path;
     private String command;
     private String content;
@@ -100,15 +101,16 @@ public class PostRequest
     @Override
     public String toString()
     {
-        return "PostRequest{" +
-                       "username='" + username + '\'' +
-                       ", password='" + password + '\'' +
-                       ", email='" + email + '\'' +
-                       ", token='" + token + '\'' +
-                       ", path='" + path + '\'' +
-                       ", command='" + command + '\'' +
-                       ", content='" + content + '\'' +
-                       ", captchaCode='" + captchaCode + '\'' +
-                       '}';
+        return "PostRequest{" + "username='" + username + '\'' + ", password='" + password + '\'' + ", email='" + email + '\'' + ", token='" + token + '\'' + ", tokenUse='" + tokenUse + '\'' + ", path='" + path + '\'' + ", command='" + command + '\'' + ", content='" + content + '\'' + ", captchaCode='" + captchaCode + '\'' + '}';
+    }
+    
+    public String getTokenUse()
+    {
+        return tokenUse;
+    }
+    
+    public void setTokenUse(String tokenUse)
+    {
+        this.tokenUse = tokenUse;
     }
 }
