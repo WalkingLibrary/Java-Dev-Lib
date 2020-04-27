@@ -25,7 +25,7 @@ public class DataBaseUtil
         {
             preparedStatement.setString(i + 1, query.getParameters().get(i));
         }
-        query.setResultSet(preparedStatement.executeQuery(query.getStatement()));
+        query.setResultSet(preparedStatement.executeQuery());
     }
     
     public static void manipulateDataBase(Query query, DataBase dataBase)
