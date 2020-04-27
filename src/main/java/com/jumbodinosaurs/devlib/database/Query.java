@@ -1,26 +1,28 @@
 package com.jumbodinosaurs.devlib.database;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class Query
 {
-    private String query;
+    private String statement;
+    private ArrayList<String> parameters;
     private ResultSet resultSet;
     private int responseCode;
     
     public Query(String query)
     {
-        this.query = query;
+        this.statement = query;
     }
     
-    public String getQuery()
+    public String getStatement()
     {
-        return query;
+        return statement;
     }
     
-    public void setQuery(String query)
+    public void setStatement(String statement)
     {
-        this.query = query;
+        this.statement = statement;
     }
     
     public ResultSet getResultSet()
@@ -41,5 +43,15 @@ public class Query
     public void setResponseCode(int responseCode)
     {
         this.responseCode = responseCode;
+    }
+    
+    public ArrayList<String> getParameters()
+    {
+        return parameters;
+    }
+    
+    public void setParameters(ArrayList<String> parameters)
+    {
+        this.parameters = parameters;
     }
 }
