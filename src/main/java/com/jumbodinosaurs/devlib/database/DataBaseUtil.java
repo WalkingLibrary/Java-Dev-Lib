@@ -95,4 +95,26 @@ public class DataBaseUtil
         
         return query;
     }
+    
+    public static <E> Query getDeleteQuery(String table, int id)
+    {
+        String statement = "DELETE FROM " + table + " WHERE id = " + id;
+        return new Query(statement);
+    }
+    
+    public static <E> Query getDeleteQuery(String table, E object)
+    {
+        String statement = "DELETE FROM " + table + " WHERE " + objectColumnName + " = ?";
+        Query deleteQuery = new Query(statement);
+        
+        
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        String objectJson = gson.toJson(object);
+        
+        ArrayList<String> parameters = new ArrayList<String>();
+        parameters.add(objectJson);
+        deleteQuery.setParameters(parameters);
+        
+        return new Query(statement);
+    }
 }
