@@ -104,7 +104,7 @@ public class DataBaseUtil
     
     public static <E> Query getDeleteQuery(String table, E object)
     {
-        String statement = "DELETE FROM " + table + " WHERE " + objectColumnName + " = ?";
+        String statement = "DELETE FROM " + table + " WHERE " + objectColumnName + " = CAST(? AS JSON);";
         Query deleteQuery = new Query(statement);
         
         
