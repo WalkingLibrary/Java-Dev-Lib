@@ -66,13 +66,14 @@ public class DataBaseUtil
         String oldObjectJson = new Gson().toJson(objectOld);
         String newObjectJson = new Gson().toJson(objectNew);
         
-        String statement = "UPDATE " + table;
+        String statement = "UPDATE ? ";
         statement += " SET " + objectColumnName + " =?";
         statement += " WHERE " + objectColumnName + " = CAST(? AS JSON);";
         
         Query query = new Query(statement);
         
         ArrayList<String> parameters = new ArrayList<String>();
+        parameters.add(table);
         parameters.add(newObjectJson);
         parameters.add(oldObjectJson);
         query.setParameters(parameters);
@@ -85,11 +86,12 @@ public class DataBaseUtil
         //https://github.com/google/gson/issues/203
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         String objectJson = gson.toJson(object);
-        String statement = "INSERT INTO " + table + "(" + objectColumnName + ") VALUES(?);";
+        String statement = "INSERT INTO ? (" + objectColumnName + ") VALUES(?);";
         
         Query query = new Query(statement);
         
         ArrayList<String> parameters = new ArrayList<String>();
+        parameters.add(table);
         parameters.add(objectJson);
         query.setParameters(parameters);
         
