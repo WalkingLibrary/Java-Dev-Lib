@@ -81,17 +81,18 @@ public class DataBaseUtil
         return query;
     }
     
+    /* Warning don't allow un-sanitized user input for table names or you'll risk sql injection
+     * */
     public static <E> Query getInsertQuery(String table, E object)
     {
         //https://github.com/google/gson/issues/203
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         String objectJson = gson.toJson(object);
-        String statement = "INSERT INTO ? (" + objectColumnName + ") VALUES(?);";
+        String statement = "INSERT INTO " + table +" (" + objectColumnName + ") VALUES(?);";
         
         Query query = new Query(statement);
-        
+    
         ArrayList<String> parameters = new ArrayList<String>();
-        parameters.add(table);
         parameters.add(objectJson);
         query.setParameters(parameters);
         
