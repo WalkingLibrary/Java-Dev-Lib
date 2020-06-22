@@ -6,11 +6,20 @@ import java.util.concurrent.TimeUnit;
 
 public abstract class ScheduledTask extends Task
 {
+    private ScheduledThreadPoolExecutor executor;
     private Future future;
+    private int delay;
+    private TimeUnit timeUnit;
+    private int period;
     
     public ScheduledTask(ScheduledThreadPoolExecutor executor)
     {
-        this.future = executor.scheduleAtFixedRate(this, getInitialDelay(), getPeriod(), getTimeUnit());
+        this.executor = executor;
+    }
+    
+    public void start()
+    {
+        this.future = executor.scheduleAtFixedRate(this, getDelay(), getPeriod(), getTimeUnit());
     }
     
     public void stop()
@@ -18,9 +27,33 @@ public abstract class ScheduledTask extends Task
         future.cancel(true);
     }
     
-    public abstract int getInitialDelay();
+    public int getDelay()
+    {
+        return delay;
+    }
     
-    public abstract int getPeriod();
+    public void setDelay(int delay)
+    {
+        this.delay = delay;
+    }
     
-    public abstract TimeUnit getTimeUnit();
+    public TimeUnit getTimeUnit()
+    {
+        return timeUnit;
+    }
+    
+    public void setTimeUnit(TimeUnit timeUnit)
+    {
+        this.timeUnit = timeUnit;
+    }
+    
+    public int getPeriod()
+    {
+        return period;
+    }
+    
+    public void setPeriod(int period)
+    {
+        this.period = period;
+    }
 }
