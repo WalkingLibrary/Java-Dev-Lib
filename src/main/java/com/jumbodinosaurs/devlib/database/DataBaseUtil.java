@@ -40,6 +40,8 @@ public class DataBaseUtil
         query.setResponseCode(preparedStatement.executeUpdate());
     }
     
+    
+    
     public static <E> ArrayList<E> getObjectsDataBase(Query query, DataBase dataBase, TypeToken<E> typeToken)
             throws SQLException, WrongStorageFormatException
     {
@@ -61,6 +63,25 @@ public class DataBaseUtil
         return objects;
     }
     
+    
+    /* Warning don't allow un-sanitized user input for table names or you'll risk sql injection
+     * */
+    
+    public static <E> Query getIDsQuery(String table, E object)
+    {
+        String objectJson = new Gson().toJson(object);
+        String statement = "SELECT id";
+        statement += " FROM " + table;
+        statement += " WHERE " + objectColumnName + " = CAST(? AS JSON);";
+    
+        Query query = new Query(statement);
+    
+        ArrayList<String> parameters = new ArrayList<String>();
+        parameters.add(objectJson);
+        query.setParameters(parameters);
+        return query;
+    }
+    
     public static <E> Query getUpdateObjectQuery(String table, E objectOld, E objectNew)
     {
         String oldObjectJson = new Gson().toJson(objectOld);
@@ -73,7 +94,6 @@ public class DataBaseUtil
         Query query = new Query(statement);
         
         ArrayList<String> parameters = new ArrayList<String>();
-        parameters.add(table);
         parameters.add(newObjectJson);
         parameters.add(oldObjectJson);
         query.setParameters(parameters);
@@ -81,8 +101,6 @@ public class DataBaseUtil
         return query;
     }
     
-    /* Warning don't allow un-sanitized user input for table names or you'll risk sql injection
-     * */
     public static <E> Query getInsertQuery(String table, E object)
     {
         //https://github.com/google/gson/issues/203
@@ -103,14 +121,6 @@ public class DataBaseUtil
     {
         String statement = "DELETE FROM " + table + " WHERE id = " + id;
         Query deleteQuery = new Query(statement);
-    
-    
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-        
-        ArrayList<String> parameters = new ArrayList<String>();
-        parameters.add(table);
-        deleteQuery.setParameters(parameters);
-        
         return deleteQuery;
     }
     
@@ -125,7 +135,6 @@ public class DataBaseUtil
         String objectJson = gson.toJson(object);
         
         ArrayList<String> parameters = new ArrayList<String>();
-        parameters.add(table);
         parameters.add(objectJson);
         deleteQuery.setParameters(parameters);
         
