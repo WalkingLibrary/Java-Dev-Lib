@@ -66,7 +66,7 @@ public class DataBaseUtil
         String oldObjectJson = new Gson().toJson(objectOld);
         String newObjectJson = new Gson().toJson(objectNew);
         
-        String statement = "UPDATE ? ";
+        String statement = "UPDATE " + table;
         statement += " SET " + objectColumnName + " =?";
         statement += " WHERE " + objectColumnName + " = CAST(? AS JSON);";
         
@@ -101,7 +101,7 @@ public class DataBaseUtil
     
     public static <E> Query getDeleteQuery(String table, int id)
     {
-        String statement = "DELETE FROM ? WHERE id = " + id;
+        String statement = "DELETE FROM " + table + " WHERE id = " + id;
         Query deleteQuery = new Query(statement);
     
     
@@ -116,7 +116,7 @@ public class DataBaseUtil
     
     public static <E> Query getDeleteQuery(String table, E object)
     {
-        String statement = "DELETE FROM ? WHERE " + objectColumnName + " = CAST(? AS JSON);";
+        String statement = "DELETE FROM " + table + " WHERE " + objectColumnName + " = CAST(? AS JSON);";
         Query deleteQuery = new Query(statement);
         
         
