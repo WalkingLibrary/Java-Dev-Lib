@@ -54,6 +54,11 @@ public class DataBaseUtil
             {
                 String objectJson = queryResult.getString(objectColumnName);
                 objects.add(new Gson().fromJson(objectJson, typeToken.getType()));
+                
+                if(typeToken.getType() instanceof Identifiable)
+                {
+                    ((Identifiable)objects.get(objects.size() - 1)).setId(queryResult.getInt("id"));
+                }
             }
             catch(SQLException | JsonParseException e)
             {
