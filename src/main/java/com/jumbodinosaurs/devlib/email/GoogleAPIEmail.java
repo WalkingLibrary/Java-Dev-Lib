@@ -24,6 +24,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
@@ -34,6 +35,8 @@ public class GoogleAPIEmail extends Email
     private transient static final String APPLICATION_NAME = "Web Server Application";
     private transient static final JsonFactory JSON_FACTORY = JacksonFactory.getDefaultInstance();
     private transient static final List<String> SCOPES = Arrays.asList(GmailScopes.MAIL_GOOGLE_COM);
+    private transient Gmail service;
+    private transient NetHttpTransport HTTP_TRANSPORT;
     private String jsonCredentials;
     private String parentDirPath;
     
@@ -61,12 +64,7 @@ public class GoogleAPIEmail extends Email
     public void sendEmail(String to, String topic, String message)
             throws Exception
     {
-        // Build a new authorized API client service.
-        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        Gmail service = new Gmail.Builder(HTTP_TRANSPORT,
-                                          JSON_FACTORY,
-                                          getCredentials(HTTP_TRANSPORT)).setApplicationName(APPLICATION_NAME).build();
-        // Print the labels in the user's account.
+       // Print the labels in the user's account.
         
         String user = "me";
         
@@ -82,6 +80,16 @@ public class GoogleAPIEmail extends Email
         
         Message emailMessage = createMessageWithEmail(mimeMessage);
         service.users().messages().send(user, emailMessage).execute();
+    }
+    
+    public void activate()
+            throws GeneralSecurityException, IOException
+    {
+        HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        service = new Gmail.Builder(HTTP_TRANSPORT,
+                                          JSON_FACTORY,
+                                          getCredentials(HTTP_TRANSPORT)).setApplicationName(APPLICATION_NAME).build();
+    
     }
     
     public String getJsonCredentials()
