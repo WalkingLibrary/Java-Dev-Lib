@@ -1,13 +1,11 @@
 package com.jumbodinosaurs.devlib.email;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.jumbodinosaurs.devlib.json.GsonUtil;
 import com.jumbodinosaurs.devlib.util.GeneralUtil;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 public class EmailManager
@@ -20,7 +18,7 @@ public class EmailManager
     {
         emailDir = GeneralUtil.checkFor(parentFile, "Emails");
         emailMemory = GeneralUtil.checkFor(emailDir, "emails.json");
-        loadEmails();
+        emails = loadEmails();
         if(emails == null)
         {
             emails = new ArrayList<Email>();
@@ -42,23 +40,31 @@ public class EmailManager
     
     private static void saveEmails(ArrayList<Email> emails)
     {
-        Type typeToken = new TypeToken<ArrayList<Email>>() {}.getType();
-        String emailsJsonized = new Gson().toJson(emails, typeToken);
-        GeneralUtil.writeContents(emailMemory, emailsJsonized, false);
+        GsonUtil.saveObjectsToHolderList(emailMemory, emails, Email.class);
     }
     
     
-    private static void loadEmails()
+    private static ArrayList<Email> loadEmails()
     {
+        ArrayList<Email> emails = new ArrayList<Email>();
         try
         {
-            emails = GsonUtil.readList(emailMemory, Email.class, new TypeToken<ArrayList<Email>>() {}, false);
+            emails = GsonUtil.readObjectHoldersList(emailMemory, Email.class, new TypeToken<ArrayList<Email>>() {});
         }
         catch(JsonParseException e)
         {
-            e.printStackTrace();
             throw new IllegalStateException("Email Data is Not Loadable");
         }
+    
+        if(emails != null)
+        {
+            for(Email domain: emails)
+            {
+                domain.setType(domain.getClass().getSimpleName());
+            }
+        }
+        
+        return emails;
     }
     
     public static Email getEmail(String username) throws NoSuchEmailException

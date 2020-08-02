@@ -1,14 +1,13 @@
 package com.jumbodinosaurs.devlib.email;
 
-public class Email
+public abstract class Email
 {
+    private String type;
     private String username;
-    private String password;
     
-    public Email(String username, String password)
+    public Email(String username)
     {
         this.username = username;
-        this.password = password;
     }
     
     public String getUsername()
@@ -21,13 +20,15 @@ public class Email
         this.username = username;
     }
     
-    public String getPassword()
+    public abstract void sendEmail(String to, String topic, String message) throws Exception;
+    
+    public String getType()
     {
-        return password;
+        return type;
     }
     
-    public void setPassword(String password)
+    public void setType(String type)
     {
-        this.password = password;
+        this.type = type;
     }
 }

@@ -1,7 +1,6 @@
 package com.jumbodinosaurs.devlib.util;
 
 import com.google.gson.Gson;
-import com.jumbodinosaurs.devlib.email.Email;
 import com.jumbodinosaurs.devlib.reflection.ResourceLoaderUtil;
 import com.jumbodinosaurs.devlib.util.objects.HttpResponse;
 import com.jumbodinosaurs.devlib.util.objects.PostRequest;
@@ -11,12 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
@@ -29,13 +22,12 @@ import java.net.URL;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
-import java.util.Date;
-import java.util.Properties;
 
 public class WebUtil
 {
     
-    public static HttpResponse getResponse(HttpURLConnection connection) throws IOException
+    public static HttpResponse getResponse(HttpURLConnection connection)
+            throws IOException
     {
         HttpResponse urlResponse = null;
         
@@ -49,8 +41,8 @@ public class WebUtil
         {
             connectionIn = connection.getErrorStream();
         }
-    
-    
+        
+        
         String response = GeneralUtil.scanStream(connectionIn);
         
         urlResponse = new HttpResponse(returnCode, response);
@@ -59,7 +51,8 @@ public class WebUtil
     }
     
     
-    public static HttpResponse getResponse(HttpsURLConnection connection) throws IOException
+    public static HttpResponse getResponse(HttpsURLConnection connection)
+            throws IOException
     {
         HttpResponse urlResponse = null;
         
@@ -73,14 +66,15 @@ public class WebUtil
         {
             connectionIn = connection.getErrorStream();
         }
-    
+        
         String response = GeneralUtil.scanStream(connectionIn);
         urlResponse = new HttpResponse(returnCode, response);
         
         return urlResponse;
     }
     
-    public static HttpResponse sendPostRequestToJumboDinosaurs(PostRequest request) throws Exception
+    public static HttpResponse sendPostRequestToJumboDinosaurs(PostRequest request)
+            throws Exception
     {
         ResourceLoaderUtil resourceLoader = new ResourceLoaderUtil();
         String response = "";
@@ -116,7 +110,7 @@ public class WebUtil
         // Create an SSLContext that uses our TrustManager
         SSLContext context = SSLContext.getInstance("TLS");
         context.init(null, tmf.getTrustManagers(), null);
-    
+        
         String url = "https://jumbodinosaurs.com/" + new Gson().toJson(request);
         URL address = new URL(url);
         HttpsURLConnection connection = (HttpsURLConnection) address.openConnection();
@@ -138,48 +132,6 @@ public class WebUtil
             response += (char) input.read();
         }
         return new HttpResponse(status, response);
-    }
-    
-    
-    //https://dzone.com/articles/sending-mail-using-javamail-api-for-gmail-server
-    //https://www.geeksforgeeks.org/sending-email-java-ssltls-authentication/
-    public static void sendEmail(Email email,
-                                 String userEmailAddress,
-                                 String topic,
-                                 String message) throws MessagingException
-    {
-        //Setting up configurations for the email connection to the Google SMTP server using TLS
-        Properties props = new Properties();
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.host", "smtp.gmail.com");
-        props.put("mail.smtp.port", "587");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
-        //Establishing a session with required user details
-        javax.mail.Session session = javax.mail.Session.getInstance(props, new javax.mail.Authenticator()
-        {
-            protected PasswordAuthentication getPasswordAuthentication()
-            {
-                return new PasswordAuthentication(email.getUsername(), email.getPassword());
-            }
-        });
-        
-        
-        //Creating a Message object to set the email content
-        MimeMessage msg = new MimeMessage(session);
-        /*Parsing the String with default delimiter as a comma by marking the boolean as true and storing the email
-                addresses in an array of InternetAddress objects*/
-        InternetAddress[] address = InternetAddress.parse(userEmailAddress, true);
-        //Setting the recipients from the address variable
-        msg.setRecipients(Message.RecipientType.TO, address);
-    
-        msg.setSubject(topic);
-        msg.setSentDate(new Date());
-        msg.setText(message);
-        msg.setHeader("XPriority", "1");
-        Transport.send(msg);
-    
-    
     }
     
     public static void loadWebPage(String url)
@@ -206,4 +158,5 @@ public class WebUtil
         frame.setVisible(true);
         
     }
+  
 }
