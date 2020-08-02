@@ -7,6 +7,7 @@ public abstract class Email
     
     public Email(String username)
     {
+        this.type = getClass().getSimpleName();
         this.username = username;
     }
     
