@@ -41,6 +41,8 @@ dependencies {
     compile 'com.sun.mail:javax.mail:1.6.1'
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.1.6'
+    // https://mvnrepository.com/artifact/io.netty/netty-all
+    compile 'io.netty:netty-all:4.1.33.Final'
 
     //GOOGLES API
     compile 'com.google.api-client:google-api-client:1.23.0'
