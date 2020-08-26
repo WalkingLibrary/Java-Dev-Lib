@@ -82,8 +82,8 @@ public class TwoDIntArrayAStarMap extends AStarMap
         childZ = (int)((Point2D)childNode.getPoint()).chop().getZ();
         
         //Check to see if it's in the bounds of map
-        if(childX > map.length || childX < 0 ||
-           childZ > map[childX].length || childZ < 0)
+        if(childX >= map.length || childX < 0 ||
+           childZ >= map[childX].length || childZ < 0)
         {
             return Double.MAX_VALUE;
         }
