@@ -74,7 +74,7 @@ public abstract class AStarPathBuilder extends PathBuilder
     
             //Get the lowest Costing Node from open
             nodeToExpand = this.open.remove(getLowestCostingNodeIndex());
-            this.closed.put(nodeToExpand.toString(), nodeToExpand);
+            this.closed.put(nodeToExpand.getPoint().toString(), nodeToExpand);
     
             this.buildingLoopHookMiddle();
             
