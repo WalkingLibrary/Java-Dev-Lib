@@ -330,6 +330,9 @@ public class DevLibMathUtil
         /* Process of Getting the Points of A 3D Jump
          * Split the X and Z axis and solve/store each axis's coefficients
          * Combine Both Quadratics
+         *
+         *
+         *
          *  */
         ArrayList<Point3D> jumpPoints = new ArrayList<Point3D>();
         
@@ -337,7 +340,7 @@ public class DevLibMathUtil
         //Split the X and Z axis and solve/store each axis's coefficients
         Direction2D directionDifference = PathFindingUtil.get2DDirectionFrom3DPoints(startPoint, endPoint);
         
-        
+        //Note: it's assumed the half way Point between StartX/Z and EndX/Z is the maximum of the Jump
         double xDifference, zDifference, xDiffMiddle, zDiffMiddle;
         
         
