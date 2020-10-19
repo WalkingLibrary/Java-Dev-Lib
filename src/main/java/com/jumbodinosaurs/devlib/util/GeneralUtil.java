@@ -227,6 +227,7 @@ public class GeneralUtil
                 fileRequestedContents += input.nextLine();
                 fileRequestedContents += "\n";
             }
+            input.close();
         }
         catch(Exception e)
         {
@@ -249,6 +250,7 @@ public class GeneralUtil
                 inputStreamContents += input.next();
                 inputStreamContents += delimiter;
             }
+            input.close();
         }
         catch(Exception e)
         {
