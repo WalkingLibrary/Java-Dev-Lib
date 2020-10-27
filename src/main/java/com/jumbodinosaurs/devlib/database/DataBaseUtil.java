@@ -87,6 +87,22 @@ public class DataBaseUtil
         return query;
     }
     
+    public static <E> Query getUpdateObjectQuery(String table, E newObject, int id)
+    {
+        String newObjectJson = new Gson().toJson(newObject);
+        
+        String statement = "UPDATE " + table;
+        statement += " SET " + objectColumnName + " =?";
+        statement += " WHERE id = " + id;
+    
+        Query query = new Query(statement);
+    
+        ArrayList<String> parameters = new ArrayList<String>();
+        parameters.add(newObjectJson);
+        query.setParameters(parameters);
+        return query;
+    }
+    
     public static <E> Query getUpdateObjectQuery(String table, E objectOld, E objectNew)
     {
         String oldObjectJson = new Gson().toJson(objectOld);
