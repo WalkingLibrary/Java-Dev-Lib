@@ -1,4 +1,4 @@
-<configuration debug="false">
+<included>
     <property name="CONSOLE_LOG_DIR" value="Console Logs"/>
     <property name="LOG_FILE_CONSOLE" value="consoleLogFile"/>
 
@@ -33,4 +33,4 @@
         <appender-ref ref="FILE_CONSOLE" />
     </logger>
 
-</configuration>
+</included>
