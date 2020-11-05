@@ -9,3 +9,5 @@ bin
 /gradlew
 /gradlew.bat
 /src/test/
+/Console Logs/
+/src/main/java/com/Main.java
