@@ -14,10 +14,10 @@
 
 
     <appender name="FILE_CONSOLE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${user.dir}/${CONSOLE_LOG_DIR}/${LOG_FILE_CONSOLE}.log</file>
+        <file>${user.dir}/${LOG_DIR}/${CONSOLE_LOG_DIR}/${LOG_FILE_CONSOLE}.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <!-- daily rollover -->
-            <fileNamePattern>${user.dir}/${LOG_DIR}/${LOG_FILE_CONSOLE}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <fileNamePattern>${user.dir}/${LOG_DIR}/${CONSOLE_LOG_DIR}/${LOG_FILE_CONSOLE}.%d{yyyy-MM-dd}.log</fileNamePattern>
             <!-- keep 60 days' worth of history capped at 10GB total size -->
             <maxHistory>60</maxHistory>
             <totalSizeCap>10GB</totalSizeCap>
