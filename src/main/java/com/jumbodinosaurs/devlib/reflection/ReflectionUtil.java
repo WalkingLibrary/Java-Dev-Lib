@@ -105,6 +105,11 @@ public class ReflectionUtil
         return resourceLoaderUtil.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
     }
     
+    public static String getCodeExePath(Object context)
+    {
+        return context.getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
+    }
+    
     public static JarFile reflectJarFile() throws IOException, NoJarFileException
     {
         ResourceLoaderUtil loaderUtil = new ResourceLoaderUtil();

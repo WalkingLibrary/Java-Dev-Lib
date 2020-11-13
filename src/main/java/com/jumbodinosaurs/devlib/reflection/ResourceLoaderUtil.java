@@ -62,8 +62,14 @@ public class ResourceLoaderUtil
     //https://stackoverflow.com/questions/11012819/how-can-i-get-a-resource-folder-from-inside-my-jar-file
     public ArrayList<String> listResources(String resourceDir) throws IOException
     {
+        return listResources(resourceDir, this);
+    }
+    
+    //https://stackoverflow.com/questions/11012819/how-can-i-get-a-resource-folder-from-inside-my-jar-file
+    public ArrayList<String> listResources(String resourceDir, Object context) throws IOException
+    {
         ArrayList<String> fileNames = new ArrayList<String>();
-        String codePath = ReflectionUtil.getCodeExePath();
+        String codePath = ReflectionUtil.getCodeExePath(context);
         try
         {
             JarFile jarFile = loadJarFile(codePath);
@@ -87,7 +93,7 @@ public class ResourceLoaderUtil
             }
             else
             { // Run with IDE
-            
+                
                 try
                 {
                     for(File file : new File(getLoader().getResource(resourceDir).toURI()).listFiles())
