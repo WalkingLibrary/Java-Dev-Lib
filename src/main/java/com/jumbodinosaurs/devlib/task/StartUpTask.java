@@ -2,20 +2,25 @@ package com.jumbodinosaurs.devlib.task;
 
 public abstract class StartUpTask extends Task
 {
-    private Phase phase;
+    //Smaller Numbers Come First
+    private int orderingNumber;
     
-    public StartUpTask(Phase phase)
+    public StartUpTask()
     {
-        this.phase = phase;
     }
     
-    public Phase getPhase()
+    public StartUpTask(int orderingNumber)
     {
-        return phase;
+        this.orderingNumber = orderingNumber;
     }
     
-    public void setPhase(Phase phase)
+    public int getOrderingNumber()
     {
-        this.phase = phase;
+        return orderingNumber;
+    }
+    
+    public void setOrderingNumber(int orderingNumber)
+    {
+        this.orderingNumber = orderingNumber;
     }
 }
