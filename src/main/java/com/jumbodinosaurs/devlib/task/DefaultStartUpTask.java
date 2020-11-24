@@ -56,6 +56,6 @@ public class DefaultStartUpTask implements Runnable
             task.run();
         }
         
-       LogManager.consoleLogger.info("Server Setup Task Complete");
+       LogManager.consoleLogger.info("Default Setup Task Complete");
     }
 }
