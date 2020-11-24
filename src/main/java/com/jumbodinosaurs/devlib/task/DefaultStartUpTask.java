@@ -1,5 +1,7 @@
 package com.jumbodinosaurs.devlib.task;
 
+import com.jumbodinosaurs.devlib.log.LogManager;
+
 import java.util.ArrayList;
 
 public class DefaultStartUpTask implements Runnable
@@ -50,10 +52,10 @@ public class DefaultStartUpTask implements Runnable
         
         for(StartUpTask task: startUpTasks)
         {
-            //LogManager.consoleLogger.info("Starting Task: " + task.getClass().getSimpleName());
+            LogManager.consoleLogger.info("Starting Task: " + task.getClass().getSimpleName());
             task.run();
         }
         
-       // LogManager.consoleLogger.info("Server Setup Task Complete");
+       LogManager.consoleLogger.info("Server Setup Task Complete");
     }
 }
