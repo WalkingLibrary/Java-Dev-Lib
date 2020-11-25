@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Point2D extends Point
 {
-    private double x, z;
+    protected double x, z;
     
     public Point2D(double x, double z)
     {

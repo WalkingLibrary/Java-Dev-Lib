@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Point3D extends Point2D
 {
-    private double y;
+    protected double y;
     
     public Point3D(double x, double y, double z)
     {
@@ -27,24 +27,24 @@ public class Point3D extends Point2D
     
     public Point3D chop()
     {
-        return new Point3D((int) getX(), (int) this.y, (int) getZ());
+        return new Point3D((int) this.x, (int) this.y, (int) this.z);
     }
     
     public Point3D differenceY(double yDifference)
     {
-        return new Point3D(getX(), this.y + yDifference, getZ());
+        return new Point3D(this.x, this.y + yDifference, this.z);
     }
     
     @Override
     public Point3D differenceX(double xDifference)
     {
-        return new Point3D(getX() + xDifference, this.y, getZ());
+        return new Point3D(this.x + xDifference, this.y, this.z);
     }
     
     @Override
     public Point3D differenceZ(double zDifference)
     {
-        return new Point3D(getX(), this.y, getZ() + zDifference);
+        return new Point3D(this.x, this.y, this.z + zDifference);
     }
     
     
@@ -55,9 +55,9 @@ public class Point3D extends Point2D
     public double getEuclideanDistance(Point point)
     {
         Point3D wayPoint = (Point3D) point;
-        return Math.sqrt(Math.pow(getX() - wayPoint.getX(), 2) +
-                         (Math.pow(getZ() - wayPoint.getZ(), 2)) +
-                         (Math.pow(getY() - wayPoint.getY(), 2)));
+        return Math.sqrt(Math.pow(this.x - wayPoint.getX(), 2) +
+                         (Math.pow(this.z - wayPoint.getZ(), 2)) +
+                         (Math.pow(this.y - wayPoint.getY(), 2)));
     }
     
    
@@ -81,7 +81,7 @@ public class Point3D extends Point2D
     @Override
     public String toString()
     {
-        return "Point3D{" + "x=" + getX() + "y=" + y  +  ", z=" + getZ() + '}';
+        return "Point3D{" + "x=" + this.x + "y=" + y  +  ", z=" + this.z + '}';
     }
     
     @Override
