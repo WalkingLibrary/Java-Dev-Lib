@@ -8,11 +8,11 @@ import java.util.Objects;
 
 public class DataBase
 {
-    private String dataBaseName;
-    private String ip;
-    private String port;
-    private String baseInfo;
-    private DataBaseUser user;
+    protected String dataBaseName;
+    protected String ip;
+    protected String port;
+    protected String baseInfo;
+    protected DataBaseUser user;
     
     
     public DataBase(String dataBaseName, String ip, String port, DataBaseUser user)
