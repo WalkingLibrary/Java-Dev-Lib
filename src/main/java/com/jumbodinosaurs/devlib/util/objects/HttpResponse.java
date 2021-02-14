@@ -30,4 +30,10 @@ public class HttpResponse
     {
         this.response = response;
     }
+    
+    @Override
+    public String toString()
+    {
+        return "HttpResponse{" + "status=" + status + ", response='" + response + '\'' + '}';
+    }
 }

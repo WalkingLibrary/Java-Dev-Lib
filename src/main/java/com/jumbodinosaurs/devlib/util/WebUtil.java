@@ -14,6 +14,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
 import javax.swing.*;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -76,6 +77,25 @@ public class WebUtil
     public static HttpResponse sendPostRequestToJumboDinosaurs(PostRequest request)
             throws Exception
     {
+        /*
+         * Process for Sending A Post Request To JumboDinosaurs
+         * Create an SSL Context
+         * Send the Post Request over HTTPs
+         *
+         *
+         *  */
+        
+        
+        /* Process for Creating a SSL Context
+         * Read the Root Cert from the Resources
+         * Create a Certificate Object
+         * Create/Combine the Keystore with the Certificate
+         * Create a TrustManager that trusts the CAs in our KeyStore
+         * Create an SSLContext that uses our TrustManager
+         *
+         */
+        
+        //Read the Root Cert from the Resources
         ResourceLoaderUtil resourceLoader = new ResourceLoaderUtil();
         String response = "";
         int status = 400;
@@ -83,6 +103,7 @@ public class WebUtil
         String certificate;
         certificate = resourceLoader.scanResource(certificatePath);
         
+        // Create a Certificate Object
         CertificateFactory cf = CertificateFactory.getInstance("X.509");
         ByteArrayInputStream bytes = new ByteArrayInputStream(certificate.getBytes());
         Certificate ca;
@@ -96,6 +117,7 @@ public class WebUtil
             return new HttpResponse(status, response);
         }
         
+        //Create/Combine the Keystore with the Certificate
         // Create a KeyStore containing our trusted CAs
         String keyStoreType = KeyStore.getDefaultType();
         KeyStore keyStore = KeyStore.getInstance(keyStoreType);
@@ -107,15 +129,33 @@ public class WebUtil
         TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
         tmf.init(keyStore);
         
+      
         // Create an SSLContext that uses our TrustManager
         SSLContext context = SSLContext.getInstance("TLS");
         context.init(null, tmf.getTrustManagers(), null);
         
-        String url = "https://jumbodinosaurs.com/" + new Gson().toJson(request);
+        
+        
+        // Send the Post Request over HTTPs
+        String url = "https://jumbodinosaurs.com/";
         URL address = new URL(url);
         HttpsURLConnection connection = (HttpsURLConnection) address.openConnection();
         connection.setSSLSocketFactory(context.getSocketFactory());
+        
+        
+        
+        //Send the Request
+        String message = new Gson().toJson(request);
+        connection.setDoOutput(true);
         connection.setRequestMethod("POST");
+        byte[] bytesToSend = message.getBytes();
+        connection.setRequestProperty("Content-Length", "" +  bytesToSend.length);
+        BufferedOutputStream writer =  new BufferedOutputStream(connection.getOutputStream());
+        writer.write(bytesToSend);
+        writer.flush();
+        writer.close();
+        
+        //Read the Response
         InputStream input;
         status = connection.getResponseCode();
         if(status == 200)
@@ -157,6 +197,57 @@ public class WebUtil
         });
         frame.setVisible(true);
         
+    }
+    
+    
+    public static HttpResponse sendLocalHostPostRequest(PostRequest postRequest)
+            throws IOException
+    {
+        
+        String url = "http://localhost/";
+        
+        String response = "";
+        int status = 400;
+        URL address = new URL(url);
+        HttpURLConnection connection = (HttpURLConnection) address.openConnection();
+     
+        String message = new Gson().toJson(postRequest);
+        connection.setDoOutput(true);
+        connection.setRequestMethod("POST");
+        byte[] bytesToSend = message.getBytes();
+        connection.setRequestProperty("Content-Length", "" +  bytesToSend.length);
+        BufferedOutputStream writer =  new BufferedOutputStream(connection.getOutputStream());
+        writer.write(bytesToSend);
+        writer.flush();
+        writer.close();
+        
+        try
+        {
+            Thread.sleep(1000);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
+        
+        status = connection.getResponseCode();
+        InputStream input;
+        
+        if(status == 200)
+        {
+            input = connection.getInputStream();
+        }
+        else
+        {
+            input = connection.getErrorStream();
+        }
+        
+        while(input.available() > 0)
+        {
+            response += (char) input.read();
+        }
+        
+        return new HttpResponse(status, response);
     }
   
 }
