@@ -26,6 +26,7 @@ public class DataBaseUtil
             preparedStatement.setString(i + 1, query.getParameters().get(i));
         }
         query.setResultSet(preparedStatement.executeQuery());
+        query.setStatementObject(preparedStatement);
     }
     
     public static void manipulateDataBase(Query query, DataBase dataBase)
@@ -38,6 +39,7 @@ public class DataBaseUtil
             preparedStatement.setString(i + 1, query.getParameters().get(i));
         }
         query.setResponseCode(preparedStatement.executeUpdate());
+        query.setStatementObject(preparedStatement);
     }
     
     
