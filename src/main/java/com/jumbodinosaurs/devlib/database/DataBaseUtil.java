@@ -20,7 +20,9 @@ public class DataBaseUtil
             throws SQLException
     {
         Connection dataBaseConnection = dataBase.getConnection();
-        PreparedStatement preparedStatement = dataBaseConnection.prepareStatement(query.getStatement());
+        PreparedStatement preparedStatement = dataBaseConnection.prepareStatement(query.getStatement(),
+                                                                                  ResultSet.TYPE_SCROLL_INSENSITIVE,
+                                                                                  ResultSet.CONCUR_READ_ONLY);
         for(int i = 0; query.getParameters() != null && i < query.getParameters().size(); i++)
         {
             preparedStatement.setString(i + 1, query.getParameters().get(i));
@@ -33,7 +35,10 @@ public class DataBaseUtil
             throws SQLException
     {
         Connection dataBaseConnection = dataBase.getConnection();
-        PreparedStatement preparedStatement = dataBaseConnection.prepareStatement(query.getStatement());
+        PreparedStatement preparedStatement = dataBaseConnection.prepareStatement(query.getStatement(),
+
+                                                                                  ResultSet.TYPE_SCROLL_INSENSITIVE,
+                                                                                  ResultSet.CONCUR_READ_ONLY);
         for(int i = 0; query.getParameters() != null && i < query.getParameters().size(); i++)
         {
             preparedStatement.setString(i + 1, query.getParameters().get(i));
