@@ -10,6 +10,7 @@ public class Query
     private ArrayList<String> parameters;
     private ResultSet resultSet;
     private Statement statementObject;
+    private boolean executable;
     private int responseCode;
     
     public Query(String query)
@@ -65,5 +66,36 @@ public class Query
     public void setStatementObject(Statement statementObject)
     {
         this.statementObject = statementObject;
+    }
+    
+    
+    public static String getStringResultSet(ResultSet resultSet)
+    {
+        String resultSetString = "";
+        try
+        {
+            for( ;resultSet.next(); )
+            {
+                for(int column = 0; column < resultSet.getMetaData().getColumnCount(); column++ )
+                {
+                    resultSetString += resultSet.getString(column);
+                }
+            }
+        }
+        catch(Exception e)
+        {
+            return e.getMessage();
+        }
+        return resultSetString;
+    }
+    
+    public boolean isExecutable()
+    {
+        return executable;
+    }
+    
+    public void setExecutable(boolean executable)
+    {
+        this.executable = executable;
     }
 }
