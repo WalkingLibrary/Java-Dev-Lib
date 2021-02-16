@@ -76,7 +76,7 @@ public class Query
         {
             for( ;resultSet.next(); )
             {
-                for(int column = 0; column < resultSet.getMetaData().getColumnCount(); column++ )
+                for(int column = 1; column - 1 < resultSet.getMetaData().getColumnCount(); column++ )
                 {
                     resultSetString += resultSet.getString(column);
                 }
