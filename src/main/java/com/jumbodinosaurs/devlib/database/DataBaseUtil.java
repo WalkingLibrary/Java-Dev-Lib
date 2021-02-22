@@ -72,6 +72,7 @@ public class DataBaseUtil
                 throw new WrongStorageFormatException(e.getMessage());
             }
         }
+        query.getStatementObject().getConnection().close();
         return objects;
     }
     
