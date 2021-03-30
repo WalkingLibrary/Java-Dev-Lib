@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 public class GeneralUtil
 {
     public static File userDir = new File(System.getProperty("user.dir"));
-    private static ResourceLoaderUtil resourceLoader = new ResourceLoaderUtil();
+    private static final ResourceLoaderUtil resourceLoader = new ResourceLoaderUtil();
     
     public static File checkFor(File file, String name, boolean forceDir)
     {
@@ -289,7 +289,8 @@ public class GeneralUtil
     
     ////https://www.codejava.net/java-se/file-io/execute-operating-system-commands-using-runtime-exec-methods
     // This Function is for running commands via the console/command prompt
-    public static String execute(String command, ArrayList<String> arguments, File executionDir) throws IOException
+    public static String execute(String command, ArrayList<String> arguments, File executionDir)
+            throws IOException
     {
         if(arguments != null && arguments.size() != 0)
         {
@@ -298,7 +299,7 @@ public class GeneralUtil
                 command += " " + argument;
             }
         }
-    
+        
         System.out.println("Executing Command:\n" + command + "\n");
         
         Process process;
@@ -314,8 +315,8 @@ public class GeneralUtil
         
         String processOutput = GeneralUtil.scanStream(process.getInputStream(), "\n");
         String processErrorOutput = GeneralUtil.scanStream(process.getErrorStream(), "\n");
-    
-    
+        
+        
         String returnOutput = "--------------------------------------\n";
         
         if(!processOutput.equals(""))
@@ -329,7 +330,7 @@ public class GeneralUtil
             returnOutput += "Error Output:" + "\n\n";
             returnOutput += processErrorOutput;
         }
-    
+        
         returnOutput += "--------------------------------------\n\n";
         return returnOutput;
         
@@ -349,6 +350,50 @@ public class GeneralUtil
         matcher.appendTail(buf);
         return buf;
     }
+    
+    
+    /**/
+    public static void copyDir(File source, File destination)
+            throws IOException
+    {
+        if(source.isDirectory())
+        {
+            if(!destination.exists())
+            {
+                destination.mkdirs();
+            }
+            
+            String[] files = source.list();
+            
+            if(files == null)
+            {
+                return;
+            }
+            
+            
+            for(String file : files)
+            {
+                File srcFile = new File(source, file);
+                File destFile = new File(destination, file);
+                
+                copyDir(srcFile, destFile);
+            }
+            return;
+        }
+        
+        
+        InputStream in = null;
+        OutputStream out = null;
+        in = new FileInputStream(source);
+        out = new FileOutputStream(destination);
+        byte[] buffer = new byte[1024];
+        int length;
+        while((length = in.read(buffer)) > 0)
+        {
+            out.write(buffer, 0, length);
+        }
+    }
+    
     
 }
 
