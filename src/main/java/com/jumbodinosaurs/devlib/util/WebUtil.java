@@ -42,9 +42,13 @@ public class WebUtil
         {
             connectionIn = connection.getErrorStream();
         }
-        
-        
-        String response = GeneralUtil.scanStream(connectionIn);
+    
+        String response = "";
+    
+        if(connectionIn != null)
+        {
+            response = GeneralUtil.scanStream(connectionIn);
+        }
         
         urlResponse = new HttpResponse(returnCode, response);
         
@@ -67,8 +71,12 @@ public class WebUtil
         {
             connectionIn = connection.getErrorStream();
         }
+        String response = "";
         
-        String response = GeneralUtil.scanStream(connectionIn);
+        if(connectionIn != null)
+        {
+            response = GeneralUtil.scanStream(connectionIn);
+        }
         urlResponse = new HttpResponse(returnCode, response);
         
         return urlResponse;
