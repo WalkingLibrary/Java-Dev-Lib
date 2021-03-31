@@ -1,6 +1,7 @@
 package com.jumbodinosaurs.devlib.util;
 
 import com.google.gson.Gson;
+import com.jumbodinosaurs.devlib.discord.DiscordWebHookAPIMessage;
 import com.jumbodinosaurs.devlib.reflection.ResourceLoaderUtil;
 import com.jumbodinosaurs.devlib.util.objects.HttpResponse;
 import com.jumbodinosaurs.devlib.util.objects.PostRequest;
@@ -42,9 +43,9 @@ public class WebUtil
         {
             connectionIn = connection.getErrorStream();
         }
-    
+        
         String response = "";
-    
+        
         if(connectionIn != null)
         {
             response = GeneralUtil.scanStream(connectionIn);
@@ -137,11 +138,10 @@ public class WebUtil
         TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
         tmf.init(keyStore);
         
-      
+        
         // Create an SSLContext that uses our TrustManager
         SSLContext context = SSLContext.getInstance("TLS");
         context.init(null, tmf.getTrustManagers(), null);
-        
         
         
         // Send the Post Request over HTTPs
@@ -151,14 +151,13 @@ public class WebUtil
         connection.setSSLSocketFactory(context.getSocketFactory());
         
         
-        
         //Send the Request
         String message = new Gson().toJson(request);
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");
         byte[] bytesToSend = message.getBytes();
-        connection.setRequestProperty("Content-Length", "" +  bytesToSend.length);
-        BufferedOutputStream writer =  new BufferedOutputStream(connection.getOutputStream());
+        connection.setRequestProperty("Content-Length", "" + bytesToSend.length);
+        BufferedOutputStream writer = new BufferedOutputStream(connection.getOutputStream());
         writer.write(bytesToSend);
         writer.flush();
         writer.close();
@@ -218,13 +217,13 @@ public class WebUtil
         int status = 400;
         URL address = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) address.openConnection();
-     
+        
         String message = new Gson().toJson(postRequest);
         connection.setDoOutput(true);
         connection.setRequestMethod("POST");
         byte[] bytesToSend = message.getBytes();
-        connection.setRequestProperty("Content-Length", "" +  bytesToSend.length);
-        BufferedOutputStream writer =  new BufferedOutputStream(connection.getOutputStream());
+        connection.setRequestProperty("Content-Length", "" + bytesToSend.length);
+        BufferedOutputStream writer = new BufferedOutputStream(connection.getOutputStream());
         writer.write(bytesToSend);
         writer.flush();
         writer.close();
@@ -257,5 +256,29 @@ public class WebUtil
         
         return new HttpResponse(status, response);
     }
-  
+    
+    
+    public static HttpResponse sendMessageToWebHook(String webHook, DiscordWebHookAPIMessage discordAPIMessage)
+            throws IOException
+    {
+        
+        
+        String messageToSend = new Gson().toJson(discordAPIMessage);
+        String url = webHook;
+        URL address = new URL(url);
+        HttpsURLConnection connection = (HttpsURLConnection) address.openConnection();
+        
+        byte[] bytesToSend = messageToSend.getBytes();
+        connection.addRequestProperty("User-Agent", "Java-Discord-Webhook");
+        connection.addRequestProperty("Content-Type", "application/json");
+        connection.setRequestProperty("Content-Length", "" + bytesToSend.length);
+        connection.setDoOutput(true);
+        connection.setRequestMethod("POST");
+        BufferedOutputStream writer = new BufferedOutputStream(connection.getOutputStream());
+        writer.write(bytesToSend);
+        writer.flush();
+        writer.close();
+        
+        return WebUtil.getResponse(connection);
+    }
 }
