@@ -5,16 +5,10 @@ import com.jumbodinosaurs.devlib.discord.DiscordWebHookAPIMessage;
 import com.jumbodinosaurs.devlib.reflection.ResourceLoaderUtil;
 import com.jumbodinosaurs.devlib.util.objects.HttpResponse;
 import com.jumbodinosaurs.devlib.util.objects.PostRequest;
-import javafx.application.Platform;
-import javafx.embed.swing.JFXPanel;
-import javafx.scene.Scene;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManagerFactory;
-import javax.swing.*;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -179,31 +173,6 @@ public class WebUtil
             response += (char) input.read();
         }
         return new HttpResponse(status, response);
-    }
-    
-    public static void loadWebPage(String url)
-    {
-        
-        final JFrame frame = new JFrame();
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(620, 440);
-        final JFXPanel fxpanel = new JFXPanel();
-        frame.add(fxpanel);
-        
-        Platform.runLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                WebEngine engine;
-                WebView wv = new WebView();
-                engine = wv.getEngine();
-                fxpanel.setScene(new Scene(wv));
-                engine.load(url);
-            }
-        });
-        frame.setVisible(true);
-        
     }
     
     
