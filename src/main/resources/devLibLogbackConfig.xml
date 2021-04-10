@@ -20,7 +20,7 @@
             <fileNamePattern>${user.dir}/${LOG_DIR}/${CONSOLE_LOG_DIR}/${LOG_FILE_CONSOLE}.%d{yyyy-MM-dd}.log</fileNamePattern>
             <!-- keep 60 days' worth of history capped at 10GB total size -->
             <maxHistory>60</maxHistory>
-            <totalSizeCap>10GB</totalSizeCap>
+            <totalSizeCap>1GB</totalSizeCap>
         </rollingPolicy>
         <encoder>
             <pattern>[%d{MM/dd/YYYY HH:mm:ss.SSS}] [%thread] %-5level: %msg%n</pattern>

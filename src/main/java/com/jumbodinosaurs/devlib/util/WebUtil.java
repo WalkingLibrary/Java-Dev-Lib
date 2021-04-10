@@ -18,6 +18,9 @@ import java.net.URL;
 import java.security.KeyStore;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateFactory;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class WebUtil
 {
@@ -76,6 +79,23 @@ public class WebUtil
         
         return urlResponse;
     }
+    
+    public static HttpURLConnection buildConnection(String url, boolean secure)
+            throws IOException
+    {
+        URL address = new URL(url);
+        if(secure)
+        {
+            HttpsURLConnection connection = (HttpsURLConnection) address.openConnection();
+            connection.addRequestProperty("User-Agent", "Dev-Lib-Client");
+            return connection;
+        }
+        
+        HttpURLConnection connection = (HttpURLConnection) address.openConnection();
+        connection.addRequestProperty("User-Agent", "Dev-Lib-Client");
+        return connection;
+    }
+    
     
     public static HttpResponse sendPostRequestToJumboDinosaurs(PostRequest request)
             throws Exception
@@ -140,8 +160,7 @@ public class WebUtil
         
         // Send the Post Request over HTTPs
         String url = "https://jumbodinosaurs.com/";
-        URL address = new URL(url);
-        HttpsURLConnection connection = (HttpsURLConnection) address.openConnection();
+        HttpsURLConnection connection = (HttpsURLConnection) buildConnection(url, true);
         connection.setSSLSocketFactory(context.getSocketFactory());
         
         
@@ -184,8 +203,7 @@ public class WebUtil
         
         String response = "";
         int status = 400;
-        URL address = new URL(url);
-        HttpURLConnection connection = (HttpURLConnection) address.openConnection();
+        HttpURLConnection connection = buildConnection(url, false);
         
         String message = new Gson().toJson(postRequest);
         connection.setDoOutput(true);
@@ -230,15 +248,9 @@ public class WebUtil
     public static HttpResponse sendMessageToWebHook(String webHook, DiscordWebHookAPIMessage discordAPIMessage)
             throws IOException
     {
-        
-        
+        HttpsURLConnection connection = (HttpsURLConnection) buildConnection(webHook, true);
         String messageToSend = new Gson().toJson(discordAPIMessage);
-        String url = webHook;
-        URL address = new URL(url);
-        HttpsURLConnection connection = (HttpsURLConnection) address.openConnection();
-        
         byte[] bytesToSend = messageToSend.getBytes();
-        connection.addRequestProperty("User-Agent", "Java-Discord-Webhook");
         connection.addRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Content-Length", "" + bytesToSend.length);
         connection.setDoOutput(true);
@@ -249,5 +261,25 @@ public class WebUtil
         writer.close();
         
         return WebUtil.getResponse(connection);
+    }
+    
+    
+    /**
+     * Returns a list with all links contained in the input
+     */
+    public static ArrayList<String> extractUrls(String text)
+    {
+        ArrayList<String> containedUrls = new ArrayList<String>();
+        String urlRegex = "((https?|ftp|gopher|telnet|file):((//)|(\\\\))+[\\w\\d:#@%/;$()~_?\\+-=\\\\\\.&]*)";
+        Pattern pattern = Pattern.compile(urlRegex, Pattern.CASE_INSENSITIVE);
+        Matcher urlMatcher = pattern.matcher(text);
+        
+        while (urlMatcher.find())
+        {
+            containedUrls.add(text.substring(urlMatcher.start(0),
+                                             urlMatcher.end(0)));
+        }
+        
+        return containedUrls;
     }
 }
