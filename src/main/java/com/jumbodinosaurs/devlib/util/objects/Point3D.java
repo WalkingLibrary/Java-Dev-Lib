@@ -48,6 +48,11 @@ public class Point3D extends Point2D
     }
     
     
+    public Point3D difference(Point3D point3D)
+    {
+        return new Point3D(this.x + point3D.getX(), this.z + point3D.getZ(), this.y + point3D.getY());
+    }
+    
     /*Maybe Look at the wiki next time you big dumb
      * https://en.wikipedia.org/wiki/Euclidean_distance
      * */

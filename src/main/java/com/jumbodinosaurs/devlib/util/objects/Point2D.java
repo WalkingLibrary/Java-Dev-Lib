@@ -45,6 +45,11 @@ public class Point2D extends Point
         return new Point2D(this.x, this.z + zDifference);
     }
     
+    public Point2D difference(Point2D point2D)
+    {
+        return new Point2D(this.x + point2D.getX(), this.z + point2D.getZ());
+    }
+    
     public Point2D chop()
     {
         return new Point2D((int) this.x, (int) this.z);
