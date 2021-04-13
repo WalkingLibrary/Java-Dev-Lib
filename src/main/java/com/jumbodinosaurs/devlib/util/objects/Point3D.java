@@ -50,7 +50,7 @@ public class Point3D extends Point2D
     
     public Point3D difference(Point3D point3D)
     {
-        return new Point3D(this.x + point3D.getX(), this.z + point3D.getZ(), this.y + point3D.getY());
+        return new Point3D(this.x + point3D.getX(), this.y + point3D.getY(), this.z + point3D.getZ());
     }
     
     /*Maybe Look at the wiki next time you big dumb
