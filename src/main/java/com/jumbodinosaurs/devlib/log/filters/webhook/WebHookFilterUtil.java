@@ -7,20 +7,24 @@ import java.util.ArrayList;
 
 public class WebHookFilterUtil
 {
+    private static ArrayList<WebHookSubscriber> subscribers;
     public static ArrayList<WebHookSubscriber> getSubScribes()
     {
-        ArrayList<WebHookSubscriber> subscribers = new ArrayList<WebHookSubscriber>();
-        for(Class classType : ReflectionUtil.getSubClasses(WebHookSubscriber.class))
+        if(subscribers == null)
         {
-            try
+            subscribers = new ArrayList<WebHookSubscriber>();
+            for(Class classType : ReflectionUtil.getSubClasses(WebHookSubscriber.class))
             {
-                WebHookSubscriber newModule = (WebHookSubscriber) classType.newInstance();
-                subscribers.add(newModule);
-            }
-            catch(Exception e)
-            {
-                //Can Log this error or you risk recursive errors
-                System.out.println(classType.getSimpleName() + " failed to load.");
+                try
+                {
+                    WebHookSubscriber newModule = (WebHookSubscriber) classType.newInstance();
+                    subscribers.add(newModule);
+                }
+                catch(Exception e)
+                {
+                    //Can Log this error or you risk recursive errors
+                    System.out.println(classType.getSimpleName() + " failed to load.");
+                }
             }
         }
         return subscribers;
