@@ -22,6 +22,7 @@
             <maxFileSize>1 GB</maxFileSize>
             <maxHistory>60</maxHistory>
         </rollingPolicy>
+        <filter class="com.jumbodinosaurs.devlib.log.filters.webhook.WebHookFilter"/>
         <encoder>
             <pattern>[%d{MM/dd/YYYY HH:mm:ss.SSS}] [%thread] %-5level: %msg%n</pattern>
         </encoder>

@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
 
 
 public class GeneralUtil
@@ -394,6 +395,23 @@ public class GeneralUtil
         }
     }
     
+    public static void decompressGzip(File source, File target)
+            throws IOException
+    {
+        
+        GZIPInputStream gzipInputStream = new GZIPInputStream(new FileInputStream(source));
+        FileOutputStream fileOutputStream = new FileOutputStream(target);
+        
+        // copy GZIPInputStream to FileOutputStream
+        byte[] byteBuffer = new byte[1024];
+        int length;
+        while((length = gzipInputStream.read(byteBuffer)) > 0)
+        {
+            fileOutputStream.write(byteBuffer, 0, length);
+        }
+        
+        
+    }
     
 }
 
