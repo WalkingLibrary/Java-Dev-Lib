@@ -24,6 +24,11 @@ public abstract class AStarMap extends Map
     
     public abstract double getNewGCost(AStarNode parentNode, AStarNode childNode);
     
+    public boolean satisfiesEnd(AStarNode node)
+    {
+        return node.getPoint().equals(getGoalPoint());
+    }
+    
     public double getHCost(Point point)
     {
         return point.getEuclideanDistance(getGoalPoint());

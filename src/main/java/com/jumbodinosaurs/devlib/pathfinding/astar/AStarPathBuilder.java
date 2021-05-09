@@ -11,8 +11,8 @@ import java.util.HashMap;
 
 public abstract class AStarPathBuilder extends PathBuilder
 {
-    private ArrayList<AStarNode> open = new ArrayList<AStarNode>();
-    private HashMap<String, AStarNode> closed = new HashMap<String, AStarNode>();
+    private final ArrayList<AStarNode> open = new ArrayList<AStarNode>();
+    private final HashMap<String, AStarNode> closed = new HashMap<String, AStarNode>();
     private AStarNode nodeToExpand;
     
     public AStarPathBuilder(AStarMap map)
@@ -78,7 +78,7 @@ public abstract class AStarPathBuilder extends PathBuilder
     
             this.buildingLoopHookMiddle();
             
-            if(nodeToExpand.getPoint().equals(this.getMap().getGoalPoint()))
+            if(this.getMap().satisfiesEnd(nodeToExpand))
             {
                 reachedGoalNode = true;
                 this.buildingLoopHookEnd();

@@ -52,3 +52,13 @@ dependencies {
     // https://mvnrepository.com/artifact/com.microsoft.sqlserver/mssql-jdbc
     compile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '9.2.0.jre8'
 }
+
+/*
+jar {
+    manifest {
+        attributes(
+                "Main-Class": "com.Main"
+        )
+    }
+}
+*/
