@@ -1,5 +1,6 @@
 package com.jumbodinosaurs.devlib.reflection;
 
+import com.jumbodinosaurs.devlib.log.LogManager;
 import com.jumbodinosaurs.devlib.reflection.exceptions.NoJarFileException;
 import com.jumbodinosaurs.devlib.util.GeneralUtil;
 
@@ -10,6 +11,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
@@ -20,7 +22,8 @@ public class ResourceLoaderUtil
         return getClass().getClassLoader();
     }
     
-    public ArrayList<URL> getURLS(String resourceDir) throws IOException
+    public ArrayList<URL> getURLS(String resourceDir)
+            throws IOException
     {
         ArrayList<URL> urls = new ArrayList<>();
         try
@@ -42,7 +45,8 @@ public class ResourceLoaderUtil
         }
     }
     
-    public JarFile loadJarFile(String filePath) throws IOException, NoJarFileException
+    public JarFile loadJarFile(String filePath)
+            throws IOException, NoJarFileException
     {
         File jarFile = new File(filePath);
         if(GeneralUtil.getType(jarFile).equals("jar") && jarFile.exists())
@@ -60,16 +64,19 @@ public class ResourceLoaderUtil
     }
     
     //https://stackoverflow.com/questions/11012819/how-can-i-get-a-resource-folder-from-inside-my-jar-file
-    public ArrayList<String> listResources(String resourceDir) throws IOException
+    public ArrayList<String> listResources(String resourceDir)
+            throws IOException
     {
         return listResources(resourceDir, this);
     }
     
     //https://stackoverflow.com/questions/11012819/how-can-i-get-a-resource-folder-from-inside-my-jar-file
-    public ArrayList<String> listResources(String resourceDir, Object context) throws IOException
+    public ArrayList<String> listResources(String resourceDir, Object context)
+            throws IOException
     {
         ArrayList<String> fileNames = new ArrayList<String>();
         String codePath = ReflectionUtil.getCodeExePath(context);
+        LogManager.consoleLogger.debug("Code Path: " + codePath);
         try
         {
             JarFile jarFile = loadJarFile(codePath);
@@ -96,7 +103,8 @@ public class ResourceLoaderUtil
                 
                 try
                 {
-                    for(File file : new File(getLoader().getResource(resourceDir).toURI()).listFiles())
+                    for(File file : Objects.requireNonNull(new File(Objects.requireNonNull(getLoader().getResource(
+                            resourceDir)).toURI()).listFiles()))
                     {
                         fileNames.add(resourceDir + "/" + file.getName());
                     }
