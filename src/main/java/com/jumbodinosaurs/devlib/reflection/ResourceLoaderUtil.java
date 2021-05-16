@@ -1,6 +1,5 @@
 package com.jumbodinosaurs.devlib.reflection;
 
-import com.jumbodinosaurs.devlib.log.LogManager;
 import com.jumbodinosaurs.devlib.reflection.exceptions.NoJarFileException;
 import com.jumbodinosaurs.devlib.util.GeneralUtil;
 
@@ -76,7 +75,7 @@ public class ResourceLoaderUtil
     {
         ArrayList<String> fileNames = new ArrayList<String>();
         String codePath = ReflectionUtil.getCodeExePath(context);
-        LogManager.consoleLogger.debug("Code Path: " + codePath);
+        System.out.println("Code Path: " + codePath);
         try
         {
             JarFile jarFile = loadJarFile(codePath);
