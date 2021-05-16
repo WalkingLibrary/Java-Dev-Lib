@@ -76,6 +76,10 @@ public class ResourceLoaderUtil
         ArrayList<String> fileNames = new ArrayList<String>();
         String codePath = ReflectionUtil.getCodeExePath(context);
         System.out.println("Code Path: " + codePath);
+        if(codePath.contains("!"))
+        {
+            codePath = codePath.split("!")[0];
+        }
         try
         {
             JarFile jarFile = loadJarFile(codePath);
