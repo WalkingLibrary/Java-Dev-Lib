@@ -295,7 +295,12 @@ public class GeneralUtil
             throws IOException, InterruptedException
     {
         String displayString = command;
-        if(arguments != null && arguments.size() != 0)
+        if(arguments == null)
+        {
+            arguments = new ArrayList<String>();
+        }
+        
+        if(arguments.size() != 0)
         {
             for(String argument : arguments)
             {
