@@ -1,6 +1,7 @@
 package com.jumbodinosaurs.devlib.util;
 
 
+import com.jumbodinosaurs.devlib.log.LogManager;
 import com.jumbodinosaurs.devlib.reflection.ResourceLoaderUtil;
 
 import java.io.*;
@@ -291,51 +292,49 @@ public class GeneralUtil
     ////https://www.codejava.net/java-se/file-io/execute-operating-system-commands-using-runtime-exec-methods
     // This Function is for running commands via the console/command prompt
     public static String execute(String command, ArrayList<String> arguments, File executionDir)
-            throws IOException
+            throws IOException, InterruptedException
     {
+        String displayString = command;
         if(arguments != null && arguments.size() != 0)
         {
             for(String argument : arguments)
             {
-                command += " " + argument;
+                displayString += " " + argument;
             }
         }
-        
-        System.out.println("Executing Command:\n" + command + "\n");
-        
-        Process process;
-        if(executionDir == null)
+    
+        LogManager.consoleLogger.debug("Executing Command:\n" +
+                                       OperatorConsole.ANSI_YELLOW +
+                                       displayString +
+                                       OperatorConsole.ANSI_RESET +
+                                       "\n");
+        arguments.add(0, command);
+        String[] argumentsArray = new String[arguments.size()];
+        argumentsArray = arguments.toArray(argumentsArray);
+    
+    
+        ProcessBuilder processBuilder = new ProcessBuilder(argumentsArray);
+        processBuilder.redirectErrorStream(true);
+        processBuilder.directory(executionDir);
+    
+        Process process = processBuilder.start();
+        StringBuilder processOutput = new StringBuilder();
+    
+        try (BufferedReader processOutputReader = new BufferedReader(
+                new InputStreamReader(process.getInputStream())))
         {
-            process = Runtime.getRuntime().exec(command);
+            String readLine;
+        
+            while ((readLine = processOutputReader.readLine()) != null)
+            {
+                processOutput.append(readLine + System.lineSeparator());
+            }
+        
+            process.waitFor();
         }
-        else
-        {
-            process = Runtime.getRuntime().exec(command, null, executionDir);
-        }
-        
-        
-        String processOutput = GeneralUtil.scanStream(process.getInputStream(), "\n");
-        String processErrorOutput = GeneralUtil.scanStream(process.getErrorStream(), "\n");
-        
-        
-        String returnOutput = "--------------------------------------\n";
-        
-        if(!processOutput.equals(""))
-        {
-            returnOutput += "Process Output:\n\n";
-            returnOutput += processOutput + "\n\n";
-        }
-        
-        if(!processErrorOutput.equals(""))
-        {
-            returnOutput += "Error Output:" + "\n\n";
-            returnOutput += processErrorOutput;
-        }
-        
-        returnOutput += "--------------------------------------\n\n";
-        return returnOutput;
-        
-        
+        return processOutput.toString();
+    
+    
     }
     
     public static StringBuffer replaceUnicodeCharacters(String data)
