@@ -300,6 +300,11 @@ public class GeneralUtil
             arguments = new ArrayList<String>();
         }
         
+        if(!executionDir.getAbsolutePath().endsWith(File.separator))
+        {
+            executionDir = new File(executionDir.getAbsolutePath() + File.separator);
+        }
+        
         if(arguments.size() != 0)
         {
             for(String argument : arguments)
