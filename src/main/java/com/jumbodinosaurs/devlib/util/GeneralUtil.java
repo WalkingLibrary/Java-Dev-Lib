@@ -319,11 +319,7 @@ public class GeneralUtil
                                        OperatorConsole.ANSI_RESET +
                                        "\n");
         arguments.add(0, command);
-        String[] argumentsArray = new String[arguments.size()];
-        argumentsArray = arguments.toArray(argumentsArray);
-    
-    
-        ProcessBuilder processBuilder = new ProcessBuilder(argumentsArray);
+        ProcessBuilder processBuilder = new ProcessBuilder(arguments);
         processBuilder.redirectErrorStream(true);
         processBuilder.directory(executionDir);
     
