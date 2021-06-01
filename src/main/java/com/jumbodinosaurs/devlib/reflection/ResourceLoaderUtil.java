@@ -44,10 +44,26 @@ public class ResourceLoaderUtil
         }
     }
     
+    public String cleanJarPath(String filePath)
+    {
+        String copyFilePath = filePath;
+        if(copyFilePath.contains("!"))
+        {
+            copyFilePath = copyFilePath.split("!")[0];
+        }
+    
+        if(copyFilePath.startsWith("file:/"))
+        {
+            copyFilePath = copyFilePath.substring("file:/".length());
+        }
+        
+        return copyFilePath;
+    }
+    
     public JarFile loadJarFile(String filePath)
             throws IOException, NoJarFileException
     {
-        File jarFile = new File(filePath);
+        File jarFile = new File(cleanJarPath(filePath));
         if(GeneralUtil.getType(jarFile).equals("jar") && jarFile.exists())
         {
             try
