@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class OptionsManager
 {
-    private File optionsFile;
+    private final File optionsFile;
     private ArrayList<Option> options;
     
     public OptionsManager(File optionsFile)
@@ -23,7 +23,7 @@ public class OptionsManager
         }
     }
     
-    public <E> Option<E> getOption(String identifier, E defaultValue)
+    public synchronized <E> Option<E> getOption(String identifier, E defaultValue)
     {
         try
         {
@@ -39,7 +39,7 @@ public class OptionsManager
     }
     
     
-    private Option getOption(String identifier) throws NoSuchOptionException
+    private synchronized Option getOption(String identifier) throws NoSuchOptionException
     {
         for(Option option : options)
         {
@@ -52,14 +52,14 @@ public class OptionsManager
         throw new NoSuchOptionException("No Option with " + identifier + " as identifier.");
     }
     
-    private void saveOptions()
+    private synchronized  void saveOptions()
     {
         GeneralUtil.writeContents(optionsFile,
                                   new Gson().toJson(options, new TypeToken<ArrayList<Option>>() {}.getType()),
                                   false);
     }
     
-    public void setOption(Option option)
+    public synchronized void setOption(Option option)
     {
         try
         {
@@ -73,7 +73,7 @@ public class OptionsManager
         saveOptions();
     }
     
-    public ArrayList<Option> getOptions()
+    public synchronized ArrayList<Option> getOptions()
     {
         return options;
     }
