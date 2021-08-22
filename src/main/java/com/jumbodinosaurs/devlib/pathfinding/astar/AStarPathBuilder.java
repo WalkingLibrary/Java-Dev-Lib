@@ -91,7 +91,7 @@ public abstract class AStarPathBuilder extends PathBuilder
             {
                 boolean isInClosed = this.closed.containsKey(neighborPoint.toString());
                 
-                AStarNode neighborNode = new AStarNode(nodeToExpand, neighborPoint);
+                AStarNode neighborNode = getNeighbor(nodeToExpand, neighborPoint);
                 
                 double neighborsGCost = this.getMap().getNewGCost(nodeToExpand, neighborNode);
                 neighborNode.setGCost(neighborsGCost);
@@ -143,6 +143,14 @@ public abstract class AStarPathBuilder extends PathBuilder
         
         
         return new Path(pathPoints);
+    }
+    
+    
+    //Adding this Function allows the AStarNode to be modified to have extra properties and then
+    //have those properties propagated to the child node by over writing this function.
+    private AStarNode getNeighbor(AStarNode parent, Point neighbor)
+    {
+        return new AStarNode(nodeToExpand, neighbor);
     }
     
     public AStarNode getNodeToExpand()
