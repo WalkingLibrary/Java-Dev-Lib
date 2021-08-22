@@ -148,7 +148,7 @@ public abstract class AStarPathBuilder extends PathBuilder
     
     //Adding this Function allows the AStarNode to be modified to have extra properties and then
     //have those properties propagated to the child node by over writing this function.
-    private AStarNode getNeighbor(AStarNode parent, Point neighbor)
+    protected AStarNode getNeighbor(AStarNode parent, Point neighbor)
     {
         return new AStarNode(nodeToExpand, neighbor);
     }
