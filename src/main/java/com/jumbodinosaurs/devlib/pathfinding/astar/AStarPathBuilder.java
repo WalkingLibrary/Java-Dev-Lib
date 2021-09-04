@@ -74,7 +74,7 @@ public abstract class AStarPathBuilder extends PathBuilder
     
             //Get the lowest Costing Node from open
             nodeToExpand = this.open.remove(getLowestCostingNodeIndex());
-            this.closed.put(nodeToExpand.getPoint().toString(), nodeToExpand);
+            this.closed.put(nodeToExpand.hashCode() + "", nodeToExpand);
     
             this.buildingLoopHookMiddle();
             
@@ -89,7 +89,7 @@ public abstract class AStarPathBuilder extends PathBuilder
             //Expand this node
             for(AStarNode neighborNode : nodeToExpand.getNeighbors(getNeighborLambda()))
             {
-                boolean isInClosed = this.closed.containsKey(neighborNode.toString());
+                boolean isInClosed = this.closed.containsKey(neighborNode.hashCode() + "");
                 
                 double neighborsGCost = this.getMap().getNewGCost(nodeToExpand, neighborNode);
                 neighborNode.setGCost(neighborsGCost);
