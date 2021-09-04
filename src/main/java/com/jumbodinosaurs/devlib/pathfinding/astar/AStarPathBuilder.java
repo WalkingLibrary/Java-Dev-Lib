@@ -93,6 +93,11 @@ public abstract class AStarPathBuilder extends PathBuilder
                 
                 AStarNode neighborNode = getNeighbor(nodeToExpand, neighborPoint);
                 
+                if(isInClosed && !getMap().isSameNode(this.closed.get(neighborPoint.toString()), neighborNode))
+                {
+                    isInClosed = false;
+                }
+                
                 double neighborsGCost = this.getMap().getNewGCost(nodeToExpand, neighborNode);
                 neighborNode.setGCost(neighborsGCost);
                 
@@ -102,7 +107,7 @@ public abstract class AStarPathBuilder extends PathBuilder
                     for(int i = 0 ; i < this.open.size(); i++)
                     {
                         AStarNode openNode = this.open.get(i);
-                        if(openNode.getPoint().equals(neighborPoint))
+                        if(getMap().isSameNode(openNode, neighborNode))
                         {
                             isNeighborInOpen = true;
                             if(neighborNode.getGCost() < openNode.getGCost())

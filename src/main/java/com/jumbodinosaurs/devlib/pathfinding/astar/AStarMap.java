@@ -29,6 +29,13 @@ public abstract class AStarMap extends Map
         return node.getPoint().equals(getGoalPoint());
     }
     
+    
+    //This Allows for context to be added to nodes and be map specific
+    public boolean isSameNode(AStarNode openNode, AStarNode neighborNode)
+    {
+        return openNode.getPoint().equals(neighborNode);
+    }
+    
     public double getHCost(Point point)
     {
         return point.getEuclideanDistance(getGoalPoint());
