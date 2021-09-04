@@ -3,6 +3,9 @@ package com.jumbodinosaurs.devlib.pathfinding.astar;
 import com.jumbodinosaurs.devlib.pathfinding.Node;
 import com.jumbodinosaurs.devlib.util.objects.Point;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 public class AStarNode implements Node
 {
     private AStarNode parentNode;
@@ -55,10 +58,42 @@ public class AStarNode implements Node
     {
         this.gCost = gCost;
     }
+    public ArrayList<AStarNode> getNeighbors(NeighborLambda neighborLambda)
+    {
+        ArrayList<AStarNode> aStarNodeNeighbors = new ArrayList<AStarNode>();
+        for(Point neighborPoint: getPoint().getNeighbors())
+        {
+            aStarNodeNeighbors.add(neighborLambda.getNeighbor(this, neighborPoint));
+        }
+        return aStarNodeNeighbors;
+    }
     
     @Override
     public String toString()
     {
         return "AStarNode{" + "parentNode=" + parentNode + ", point=" + point + ", gCost=" + gCost + '}';
+    }
+    
+    @Override
+    public boolean equals(Object o)
+    {
+        if(this == o)
+        {
+            return true;
+        }
+        if(o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+        AStarNode aStarNode = (AStarNode) o;
+        return Double.compare(aStarNode.gCost, gCost) == 0 &&
+               Objects.equals(parentNode, aStarNode.parentNode) &&
+               Objects.equals(point, aStarNode.point);
+    }
+    
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(parentNode, point, gCost);
     }
 }
