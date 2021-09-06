@@ -71,7 +71,7 @@ public abstract class AStarPathBuilder<E extends Node> extends PathBuilder
             nodeToExpand = getLowestCostingNode();
             this.buildingLoopHookMiddle();
             
-            if(nodeToExpand.equals(map.getGoalNode()) || map.satisfiesEnd(nodeToExpand))
+            if(map.satisfiesEnd(nodeToExpand))
             {
                 
                 this.buildingLoopHookEnd();
