@@ -88,7 +88,7 @@ public abstract class AStarPathBuilder<E extends Node> extends PathBuilder
                 {
                     map.setG(neighborNode, tentativeG);
                     neighborNode.setParentNode(nodeToExpand);
-                    open.replace((E) neighborNode, map.g(neighborNode) + map.h(neighborNode, map.getGoalNode()));
+                    open.replace((E) neighborNode, map.g(neighborNode) + map.h(neighborNode));
                 }
                 
                 

@@ -35,7 +35,7 @@ public abstract class Map<E extends Node>
     }
     
     
-    public abstract Double h(Node node, Node goalNode);
+    public abstract Double h(Node node);
     
     
     public abstract Double distance(Node parent, Node child);

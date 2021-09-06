@@ -104,7 +104,7 @@ public class TwoDIntArrayAStarMap extends Map
     }
     
     @Override
-    public Double h(Node node, Node goalNode)
+    public Double h(Node node)
     {
         return ((AStarNode<Point2D>) node).getPoint().getEuclideanDistance(((AStarNode<Point2D>) goalNode).getPoint());
     }
