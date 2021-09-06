@@ -7,7 +7,7 @@ public abstract class Map<E extends Node>
     protected E startNode;
     protected E goalNode;
     
-    protected HashMap<Node, Double> costsMap;
+    protected HashMap<String, Double> costsMap = new HashMap<String, Double>();
     
     public Map(E startNode, E goalNode)
     {
@@ -18,11 +18,11 @@ public abstract class Map<E extends Node>
     
     public Double g(Node node)
     {
-        if(!costsMap.containsKey(node))
+        if(!costsMap.containsKey(node.toString()))
         {
             return Double.MAX_VALUE;
         }
-        return costsMap.get(node);
+        return costsMap.get(node.toString());
     }
     
     
@@ -30,7 +30,7 @@ public abstract class Map<E extends Node>
     {
         if(!(cost >= Double.MAX_VALUE))
         {
-            costsMap.put(node, cost);
+            costsMap.put(node.toString(), cost);
         }
     }
     

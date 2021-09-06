@@ -24,17 +24,17 @@ public abstract class AStarPathBuilder<E extends Node> extends PathBuilder
     public E getLowestCostingNode()
     {
         E bestNode = null;
-        double bestFCost = Double.MAX_VALUE;
-        
         for(E node : open.keySet())
         {
-            if(bestFCost > open.get(node))
+            if(bestNode == null)
             {
-                bestFCost = open.get(node);
+                bestNode = node;
+            }
+            if(open.get(bestNode) > open.get(node))
+            {
                 bestNode = node;
             }
         }
-        
         return bestNode;
     }
     
@@ -59,6 +59,8 @@ public abstract class AStarPathBuilder<E extends Node> extends PathBuilder
         
         //Add The Start Node to the open list
         this.open.put((E) map.getStartNode(), 0.0);
+        this.map.setG(nodeToExpand,0.0);
+        
         while(open.keySet().size() > 0)
         {
             if(!shouldContinueGenerating())
@@ -84,17 +86,12 @@ public abstract class AStarPathBuilder<E extends Node> extends PathBuilder
             {
                 
                 double tentativeG = map.g(nodeToExpand) + map.distance(nodeToExpand, neighborNode);
+                
                 if(tentativeG < map.g(neighborNode))
                 {
-                    map.setG(neighborNode, tentativeG);
                     neighborNode.setParentNode(nodeToExpand);
-                    open.replace((E) neighborNode, map.g(neighborNode) + map.h(neighborNode));
-                }
-                
-                
-                if(!open.containsKey(neighborNode))
-                {
-                    open.put((E) neighborNode, map.g(neighborNode));
+                    map.setG(neighborNode, tentativeG);
+                    open.put((E) neighborNode, map.g(neighborNode) + map.h(neighborNode));
                 }
             }
             
@@ -116,5 +113,25 @@ public abstract class AStarPathBuilder<E extends Node> extends PathBuilder
     public void setNodeToExpand(E nodeToExpand)
     {
         this.nodeToExpand = nodeToExpand;
+    }
+    
+    public HashMap<E, Double> getOpen()
+    {
+        return open;
+    }
+    
+    public void setOpen(HashMap<E, Double> open)
+    {
+        this.open = open;
+    }
+    
+    public Map getMap()
+    {
+        return map;
+    }
+    
+    public void setMap(Map map)
+    {
+        this.map = map;
     }
 }

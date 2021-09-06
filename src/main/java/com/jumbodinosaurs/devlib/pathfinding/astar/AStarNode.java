@@ -2,6 +2,7 @@ package com.jumbodinosaurs.devlib.pathfinding.astar;
 
 import com.jumbodinosaurs.devlib.pathfinding.Node;
 import com.jumbodinosaurs.devlib.util.objects.Point;
+import com.jumbodinosaurs.devlib.util.objects.Point3D;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,13 @@ public class AStarNode<E extends Point> implements Node
     @Override
     public ArrayList<Node> getNeighbors()
     {
-        return null;
+        ArrayList<Node> neighbors = new ArrayList<Node>();
+        for(Point neighbor: this.getPoint().getNeighbors())
+        {
+            Point3D neighbor3D = (Point3D) neighbor;
+            neighbors.add(new AStarNode<Point3D>(this, neighbor3D));
+        }
+        return neighbors;
     }
     
     @Override
