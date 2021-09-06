@@ -40,6 +40,8 @@ public abstract class Map<E extends Node>
     
     public abstract Double distance(Node parent, Node child);
     
+    public abstract boolean satisfiesEnd(Node node);
+    
     
     public E getStartNode()
     {
