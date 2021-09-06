@@ -1,10 +1,14 @@
 package com.jumbodinosaurs.devlib.pathfinding;
 
-import com.jumbodinosaurs.devlib.util.objects.Point;
+import java.util.ArrayList;
 
 public interface Node
 {
-    Point getPoint();
+    Node getParentNode();
     
-    void setPoint(Point point);
+    
+    void setParentNode(Node parentNode);
+    
+    
+    ArrayList<Node> getNeighbors();
 }

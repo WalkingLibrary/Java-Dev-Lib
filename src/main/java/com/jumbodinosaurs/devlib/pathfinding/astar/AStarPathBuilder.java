@@ -1,48 +1,46 @@
 package com.jumbodinosaurs.devlib.pathfinding.astar;
 
-import com.jumbodinosaurs.devlib.pathfinding.Path;
+import com.jumbodinosaurs.devlib.pathfinding.Map;
+import com.jumbodinosaurs.devlib.pathfinding.Node;
 import com.jumbodinosaurs.devlib.pathfinding.PathBuilder;
 import com.jumbodinosaurs.devlib.pathfinding.exceptions.NoAvailablePathException;
 import com.jumbodinosaurs.devlib.pathfinding.exceptions.PreMatureStopException;
-import com.jumbodinosaurs.devlib.util.objects.Point;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-public abstract class AStarPathBuilder extends PathBuilder
+public abstract class AStarPathBuilder<E extends Node> extends PathBuilder
 {
-    private final ArrayList<AStarNode> open = new ArrayList<AStarNode>();
-    private final HashMap<String, AStarNode> closed = new HashMap<String, AStarNode>();
-    private AStarNode nodeToExpand;
     
-    public AStarPathBuilder(AStarMap map)
+    protected HashMap<E, Double> open = new HashMap<E, Double>();
+    
+    protected Map map;
+    private E nodeToExpand;
+    
+    public AStarPathBuilder(Map map)
     {
-        super(map);
+        this.map = map;
     }
     
-    
-    public int getLowestCostingNodeIndex()
+    public E getLowestCostingNode()
     {
-        int nodeIndex = 0;
-        for(int i = 0; i < this.open.size(); i++)
+        E bestNode = null;
+        double bestFCost = Double.MAX_VALUE;
+        
+        for(E node : open.keySet())
         {
-            AStarNode currentNode = this.open.get(i);
-            if(getMap().getFCost(currentNode) < getMap().getFCost(this.open.get(nodeIndex)))
+            if(bestFCost > open.get(node))
             {
-                nodeIndex = i;
+                bestFCost = open.get(node);
+                bestNode = node;
             }
         }
-        return nodeIndex;
+        
+        return bestNode;
     }
     
-    @Override
-    public AStarMap getMap()
-    {
-        return (AStarMap) super.getMap();
-    }
     
-    @Override
-    public Path buildPath() throws NoAvailablePathException, PreMatureStopException
+    public E buildPath()
+            throws NoAvailablePathException, PreMatureStopException
     {
         /* https://en.wikipedia.org/wiki/A*_search_algorithm
          *
@@ -57,113 +55,65 @@ public abstract class AStarPathBuilder extends PathBuilder
          * Create and return the path from the node to expand
          *
          *  */
-    
         
-    
+        
         //Add The Start Node to the open list
-        this.open.add(this.getMap().getStartNode());
-        boolean reachedGoalNode = false;
-        
-        do
+        this.open.put((E) map.getStartNode(), 0.0);
+        while(open.keySet().size() > 0)
         {
             if(!shouldContinueGenerating())
             {
                 throw new PreMatureStopException("Path not found before Stop");
             }
             this.buildingLoopHookStart();
-    
+            
             //Get the lowest Costing Node from open
-            nodeToExpand = this.open.remove(getLowestCostingNodeIndex());
-            this.closed.put(nodeToExpand.getPoint().toString(), nodeToExpand);
-    
+            nodeToExpand = getLowestCostingNode();
             this.buildingLoopHookMiddle();
             
-            if(this.getMap().satisfiesEnd(nodeToExpand))
+            if(nodeToExpand.equals(map.getGoalNode()))
             {
-                reachedGoalNode = true;
+                
                 this.buildingLoopHookEnd();
-                break;
+                return nodeToExpand;
             }
-    
+            
             
             //Expand this node
-            for(Point neighborPoint : nodeToExpand.getPoint().getNeighbors())
+            for(Node neighborNode : nodeToExpand.getNeighbors())
             {
-                boolean isInClosed = this.closed.containsKey(neighborPoint.toString());
                 
-                AStarNode neighborNode = getNeighbor(nodeToExpand, neighborPoint);
-                
-                if(isInClosed && !getMap().isSameNode(this.closed.get(neighborPoint.toString()), neighborNode))
+                double tentativeG = map.g(nodeToExpand) + map.distance(nodeToExpand, neighborNode);
+                if(tentativeG < map.g(neighborNode))
                 {
-                    isInClosed = false;
+                    map.setG(neighborNode, tentativeG);
+                    neighborNode.setParentNode(nodeToExpand);
+                    open.replace((E) neighborNode, map.g(neighborNode) + map.h(neighborNode, map.getGoalNode()));
                 }
                 
-                double neighborsGCost = this.getMap().getNewGCost(nodeToExpand, neighborNode);
-                neighborNode.setGCost(neighborsGCost);
                 
-                if(!isInClosed && neighborsGCost < Double.MAX_VALUE)
+                if(!open.containsKey(neighborNode))
                 {
-                    boolean isNeighborInOpen = false;
-                    for(int i = 0 ; i < this.open.size(); i++)
-                    {
-                        AStarNode openNode = this.open.get(i);
-                        if(getMap().isSameNode(openNode, neighborNode))
-                        {
-                            isNeighborInOpen = true;
-                            if(neighborNode.getGCost() < openNode.getGCost())
-                            {
-                                openNode.setParentNode(nodeToExpand);
-                                openNode.setGCost(neighborNode.getGCost());
-                            }
-                            break;
-                        }
-                    }
-    
-                    if(!isNeighborInOpen)
-                    {
-                        this.open.add(neighborNode);
-                    }
+                    open.put((E) neighborNode, map.g(neighborNode));
                 }
             }
+            
             this.buildingLoopHookEnd();
         }
-        while(open.size() > 0);
         
-        //Ensure the goal point is reachable
-        if(!reachedGoalNode)
-        {
-            throw new NoAvailablePathException("Could not find a path from \n" +
-                                               getMap().getStartPoint() +
-                                               "\nto\n" +
-                                               getMap().getGoalPoint());
-        }
-        //Create and return the path from the node to expand
-        ArrayList<Point> pathPoints = new ArrayList<Point>();
-        AStarNode currentNode = nodeToExpand;
-        while(currentNode.getParentNode() != null)
-        {
-            pathPoints.add(currentNode.getParentNode().getPoint());
-            currentNode = currentNode.getParentNode();
-        }
-        
-        
-        return new Path(pathPoints);
+        throw new NoAvailablePathException("Could not find a path from \n" +
+                                           map.getStartNode().toString() +
+                                           "\nto\n" +
+                                           map.getGoalNode().toString());
     }
     
     
-    //Adding this Function allows the AStarNode to be modified to have extra properties and then
-    //have those properties propagated to the child node by over writing this function.
-    protected AStarNode getNeighbor(AStarNode parent, Point neighbor)
-    {
-        return new AStarNode(nodeToExpand, neighbor);
-    }
-    
-    public AStarNode getNodeToExpand()
+    public E getNodeToExpand()
     {
         return nodeToExpand;
     }
     
-    public void setNodeToExpand(AStarNode nodeToExpand)
+    public void setNodeToExpand(E nodeToExpand)
     {
         this.nodeToExpand = nodeToExpand;
     }

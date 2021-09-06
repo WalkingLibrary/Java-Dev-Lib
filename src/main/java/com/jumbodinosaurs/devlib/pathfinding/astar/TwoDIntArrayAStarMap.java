@@ -1,10 +1,12 @@
 package com.jumbodinosaurs.devlib.pathfinding.astar;
 
+import com.jumbodinosaurs.devlib.pathfinding.Map;
+import com.jumbodinosaurs.devlib.pathfinding.Node;
 import com.jumbodinosaurs.devlib.util.objects.Point2D;
 
-public class TwoDIntArrayAStarMap extends AStarMap
+public class TwoDIntArrayAStarMap extends Map
 {
-    private int[][] map;
+    private final int[][] map;
     /* Map Makers
      * 0 means the cell can be traversed
      * 1 means the cell can not be traversed
@@ -12,9 +14,10 @@ public class TwoDIntArrayAStarMap extends AStarMap
      * 3 is the goal cell
      *  */
     
-    public TwoDIntArrayAStarMap(AStarNode startPoint, AStarNode goalPoint, int[][] map)
+    
+    public TwoDIntArrayAStarMap(AStarNode<Point2D> startNode, AStarNode<Point2D> goalNode, int[][] map)
     {
-        super(startPoint, goalPoint);
+        super(startNode, goalNode);
         this.map = map;
     }
     
@@ -61,8 +64,10 @@ public class TwoDIntArrayAStarMap extends AStarMap
     }
     
     @Override
-    public double getNewGCost(AStarNode parentNode, AStarNode childNode)
+    public Double distance(Node parentNode, Node childNode)
     {
+        Point2D parentPoint = ((AStarNode<Point2D>)parentNode).getPoint();
+        Point2D childPoint = ((AStarNode<Point2D>)childNode).getPoint();
         /* Map Makers
          * 0 means the cell can be traversed
          * 1 means the cell can not be traversed
@@ -78,8 +83,8 @@ public class TwoDIntArrayAStarMap extends AStarMap
          * Note: it's assumed the int[][] map that is given is square
          * */
         int childX, childZ;
-        childX = (int)((Point2D)childNode.getPoint()).chop().getX();
-        childZ = (int)((Point2D)childNode.getPoint()).chop().getZ();
+        childX = (int) childPoint.chop().getX();
+        childZ = (int) childPoint.chop().getZ();
         
         //Check to see if it's in the bounds of map
         if(childX >= map.length || childX < 0 ||
@@ -95,6 +100,13 @@ public class TwoDIntArrayAStarMap extends AStarMap
         }
         
         //now we return the g cost of the parent plus the distance from the parent node to the child node
-        return parentNode.getGCost() + parentNode.getPoint().getEuclideanDistance(childNode.getPoint());
+        return g(parentNode) + parentPoint.getEuclideanDistance(childPoint);
     }
+    
+    @Override
+    public Double h(Node node, Node goalNode)
+    {
+        return ((AStarNode<Point2D>) node).getPoint().getEuclideanDistance(((AStarNode<Point2D>) goalNode).getPoint());
+    }
+   
 }

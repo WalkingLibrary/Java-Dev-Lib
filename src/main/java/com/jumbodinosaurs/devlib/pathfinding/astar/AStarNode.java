@@ -3,42 +3,36 @@ package com.jumbodinosaurs.devlib.pathfinding.astar;
 import com.jumbodinosaurs.devlib.pathfinding.Node;
 import com.jumbodinosaurs.devlib.util.objects.Point;
 
-public class AStarNode implements Node
+import java.util.ArrayList;
+
+public class AStarNode<E extends Point> implements Node
 {
     private AStarNode parentNode;
-    private Point point;
-    private double gCost;
+    private E point;
     
-    public AStarNode(AStarNode parentNode, Point point)
+    public AStarNode(AStarNode parentNode, E point)
     {
         this.parentNode = parentNode;
         this.point = point;
-        
-    }
-    
-    public AStarNode(AStarNode parentNode, Point point, double gCost)
-    {
-        this.parentNode = parentNode;
-        this.point = point;
-        this.gCost = gCost;
-    }
-    
-    
-    @Override
-    public Point getPoint()
-    {
-        return point;
     }
     
     @Override
-    public void setPoint(Point point)
+    public ArrayList<Node> getNeighbors()
     {
-        this.point = point;
+        return null;
     }
     
+    @Override
     public AStarNode getParentNode()
     {
         return parentNode;
+    }
+    
+    
+    @Override
+    public void setParentNode(Node parentNode)
+    {
+        this.parentNode = (AStarNode) parentNode;
     }
     
     public void setParentNode(AStarNode parentNode)
@@ -46,27 +40,13 @@ public class AStarNode implements Node
         this.parentNode = parentNode;
     }
     
-    public double getGCost()
+    public E getPoint()
     {
-        return gCost;
+        return point;
     }
     
-    public void setGCost(double gCost)
+    public void setPoint(E point)
     {
-        this.gCost = gCost;
+        this.point = point;
     }
-   
-    
-    @Override
-    public String toString()
-    {
-        return "AStarNode{" + "parentNode=" + parentNode + ", point=" + point + ", gCost=" + gCost + '}';
-    }
-    
-    public boolean equals(AStarNode aStarNode)
-    {
-        return aStarNode.getPoint().equals(getPoint());
-    }
-    
-   
 }

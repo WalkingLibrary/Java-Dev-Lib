@@ -3,27 +3,12 @@ package com.jumbodinosaurs.devlib.pathfinding;
 import com.jumbodinosaurs.devlib.pathfinding.exceptions.NoAvailablePathException;
 import com.jumbodinosaurs.devlib.pathfinding.exceptions.PreMatureStopException;
 
-public abstract class PathBuilder<E extends Map>
+public abstract class PathBuilder<E extends Node>
 {
-    private E map;
     private boolean continueGenerating = true;
     
-    public PathBuilder(E map)
-    {
-        this.map = map;
-    }
     
-    public E getMap()
-    {
-        return map;
-    }
-    
-    public void setMap(E map)
-    {
-        this.map = map;
-    }
-    
-    public abstract Path buildPath() throws NoAvailablePathException, PreMatureStopException;
+    public abstract E buildPath() throws NoAvailablePathException, PreMatureStopException;
     
     
     

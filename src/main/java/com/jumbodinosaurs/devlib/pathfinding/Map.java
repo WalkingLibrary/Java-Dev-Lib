@@ -1,10 +1,13 @@
 package com.jumbodinosaurs.devlib.pathfinding;
 
-import com.jumbodinosaurs.devlib.util.objects.Point;
+import java.util.HashMap;
 
 public abstract class Map<E extends Node>
 {
-    private E startNode, goalNode;
+    protected E startNode;
+    protected E goalNode;
+    
+    protected HashMap<Node, Double> costsMap;
     
     public Map(E startNode, E goalNode)
     {
@@ -12,15 +15,30 @@ public abstract class Map<E extends Node>
         this.goalNode = goalNode;
     }
     
-    public Point getStartPoint()
+    
+    public Double g(Node node)
     {
-        return startNode.getPoint();
+        if(!costsMap.containsKey(node))
+        {
+            return Double.MAX_VALUE;
+        }
+        return costsMap.get(node);
     }
     
-    public Point getGoalPoint()
+    
+    public void setG(Node node, Double cost)
     {
-        return goalNode.getPoint();
+        if(!(cost >= Double.MAX_VALUE))
+        {
+            costsMap.put(node, cost);
+        }
     }
+    
+    
+    public abstract Double h(Node node, Node goalNode);
+    
+    
+    public abstract Double distance(Node parent, Node child);
     
     
     public E getStartNode()
@@ -28,8 +46,18 @@ public abstract class Map<E extends Node>
         return startNode;
     }
     
+    public void setStartNode(E startNode)
+    {
+        this.startNode = startNode;
+    }
+    
     public E getGoalNode()
     {
         return goalNode;
+    }
+    
+    public void setGoalNode(E goalNode)
+    {
+        this.goalNode = goalNode;
     }
 }
