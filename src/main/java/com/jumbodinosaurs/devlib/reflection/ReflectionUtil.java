@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 
@@ -56,22 +55,35 @@ public class ReflectionUtil
     
     public static ArrayList<Class> getSubClasses(Class classTypePattern)
     {
+        return getSubClasses(classTypePattern, false, false);
+    }
+    
+    public static ArrayList<Class> getSubClasses(Class classTypePattern, boolean includeInterfaces,
+                                                 boolean includeAbstract)
+    {
         /* Getting an ArrayList of the SubClass Type of a given Class
          * Scan the Runtime Environment
          * Get all SubClass Instances of the Given classTypePattern
          * Filter this list for Abstract and Local Instances
          */
-    
+        
         //Scan the Runtime Environment
         try(ScanResult scanResult = new ClassGraph().enableClassInfo().scan())
         {
             //Get all SubClass Instances of the Given classTypePattern
             ClassInfoList controlClasses = scanResult.getSubclasses(classTypePattern.getCanonicalName());
-            List<Class<?>> controlClassRefs = controlClasses.loadClasses();
-    
+            ArrayList<Class<?>> subClasses = new ArrayList<Class<?>>();
+            subClasses.addAll(controlClasses.loadClasses());
+            
+            if(includeInterfaces)
+            {
+                ClassInfoList interFaceClass = scanResult.getClassesImplementing(classTypePattern.getCanonicalName());
+                subClasses.addAll(interFaceClass.loadClasses());
+            }
+            
             //Filter this list for Abstract and Local Instances
             ArrayList<Class> classes = new ArrayList<Class>();
-            for(Class classType : controlClassRefs)
+            for(Class classType : subClasses)
             {
                 try
                 {
@@ -79,7 +91,7 @@ public class ReflectionUtil
                     if(classType.getCanonicalName() != null)
                     {
                         //Abstract Instances
-                        if(!Modifier.isAbstract(classType.getModifiers()))
+                        if(!Modifier.isAbstract(classType.getModifiers()) || includeAbstract)
                         {
                             classes.add(Class.forName(classType.getCanonicalName()));
                         }
@@ -98,6 +110,7 @@ public class ReflectionUtil
         }
         return new ArrayList<Class>();
     }
+    
     
     public static String getCodeExePath()
     {
