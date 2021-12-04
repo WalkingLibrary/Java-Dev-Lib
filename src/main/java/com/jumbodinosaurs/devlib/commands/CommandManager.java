@@ -32,6 +32,17 @@ public class CommandManager
     public static MessageResponse filter(String input, boolean hasPrefix) throws WaveringParametersException
     {
         MessageResponse response = null;
+        Command command = filterCommand(input, hasPrefix);
+        
+        if(command != null)
+        {
+            response = command.getExecutedMessage();
+        }
+        return response;
+    }
+    
+    public static Command filterCommand(String input, boolean hasPrefix) throws WaveringParametersException
+    {
         CommandParser parser = new CommandParser(input, hasPrefix);
         String command = parser.getCommand();
         ArrayList<Parameter> parameters = parser.getParameters();
@@ -44,10 +55,11 @@ public class CommandManager
                     ((CommandWithParameters) consoleCommand).setParameters(parameters);
                     
                 }
-                response = consoleCommand.getExecutedMessage();
+                return consoleCommand;
             }
         }
-        return response;
+        
+        return null;
     }
     
     public static ArrayList<String> getCategories()
