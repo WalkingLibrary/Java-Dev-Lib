@@ -52,7 +52,7 @@ public class SQLDatabaseObjectUtil
             int id = queryResult.getInt("id");
             selectedObjects.add(new SQLDataBaseObjectHolder(id, objectJson));
         }
-        
+        selectQuery.getStatementObject().getConnection().close();
         return selectedObjects;
     }
     
@@ -72,6 +72,7 @@ public class SQLDatabaseObjectUtil
         
         //Execute Query
         DataBaseUtil.manipulateDataBase(updateQuery, dataBase);
+        updateQuery.getStatementObject().getConnection().close();
     }
     
     
