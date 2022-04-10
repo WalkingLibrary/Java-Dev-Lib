@@ -100,7 +100,7 @@ public class DevLibMathUtil
     
         //Remove the Specified Columns and Rows
         double[][] subMatrix = new double[matrix.length - 1][matrix.length - 1];
-        ArrayList<Double> tempSubMatrix = new ArrayList<Double>();
+        ArrayList<Double> tempSubMatrix = new ArrayList<>();
     
         for(int row = 0; row < matrix.length; row++)
         {
@@ -108,7 +108,7 @@ public class DevLibMathUtil
             {
                 if(row != rowToRemove && column != columnToRemove)
                 {
-                    tempSubMatrix.add(new Double(matrix[row][column]));
+                    tempSubMatrix.add(matrix[row][column]);
                 }
             }
         }
@@ -166,7 +166,7 @@ public class DevLibMathUtil
         
         // Solve The Determinate for the Denominator Matrix
         double[][] denominator = {equationOne, equationTwo, equationThree};
-        double denominatorDeterminate = 0;
+        double denominatorDeterminate;
         
         try
         {
@@ -334,7 +334,7 @@ public class DevLibMathUtil
          *
          *
          *  */
-        ArrayList<Point3D> jumpPoints = new ArrayList<Point3D>();
+        ArrayList<Point3D> jumpPoints = new ArrayList<>();
         
         
         //Split the X and Z axis and solve/store each axis's coefficients
@@ -380,7 +380,7 @@ public class DevLibMathUtil
         }
         catch(DivideByZeroException e)
         {
-        
+            //Do Nothing
         }
         catch(MatrixIsNotSquareException e)
         {
