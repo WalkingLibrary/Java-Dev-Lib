@@ -44,7 +44,7 @@ public class SQLDatabaseObjectUtil
         
         
         //Create Object Holders from Returned Information
-        ArrayList<SQLDataBaseObjectHolder> selectedObjects = new ArrayList<SQLDataBaseObjectHolder>();
+        ArrayList<SQLDataBaseObjectHolder> selectedObjects = new ArrayList<>();
         ResultSet queryResult = selectQuery.getResultSet();
         while(queryResult.next())
         {
@@ -61,15 +61,22 @@ public class SQLDatabaseObjectUtil
         /*
          * Process for Putting Objects
          * Craft Query
+         * Add Parameters
          * Execute Query
          *   */
-        
+
         //Craft Query
-        String updateStatement = "REPLACE INTO %s (id, objectJson) VALUES(%s, '%s');";
+        String updateStatement = "REPLACE INTO %s (id, objectJson) VALUES(?, ?);";
         String objectJson = new Gson().toJson(object);
-        updateStatement = String.format(updateStatement, object.getClass().getSimpleName(), id + "", objectJson);
+        updateStatement = String.format(updateStatement, object.getClass().getSimpleName());
         Query updateQuery = new Query(updateStatement);
-        
+
+        //Add Parameters
+        ArrayList<String> queryParameters = new ArrayList<>();
+        queryParameters.add(id + "");
+        queryParameters.add(objectJson);
+        updateQuery.setParameters(queryParameters);
+
         //Execute Query
         DataBaseUtil.manipulateDataBase(updateQuery, dataBase);
         updateQuery.getStatementObject().getConnection().close();
