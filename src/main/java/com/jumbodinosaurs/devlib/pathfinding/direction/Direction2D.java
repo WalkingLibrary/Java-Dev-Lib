@@ -53,16 +53,66 @@ public enum Direction2D
     
     public Direction2D getOppositeDirection()
     {
-        for(Direction2D direction : Direction2D.values())
+        for (Direction2D direction : Direction2D.values())
         {
-            if((this.x * -1) == direction.x && (this.z * -1) == direction.z)
+            if ((this.x * -1) == direction.x && (this.z * -1) == direction.z)
             {
                 return direction;
             }
         }
         return SAMEPOINT;
     }
-    
+
+    public Direction2D getNextClockDirection(boolean clockWise)
+    {
+        if (clockWise)
+        {
+            switch (this)
+            {
+                case NORTH:
+                    return NORTHEAST;
+                case NORTHEAST:
+                    return EAST;
+                case EAST:
+                    return SOUTHEAST;
+                case SOUTHEAST:
+                    return SOUTH;
+                case SOUTH:
+                    return SOUTHWEST;
+                case SOUTHWEST:
+                    return WEST;
+                case WEST:
+                    return NORTHWEST;
+                case NORTHWEST:
+                    return NORTH;
+                default:
+                    return SAMEPOINT;
+            }
+        }
+
+        switch (this)
+        {
+            case NORTH:
+                return NORTHWEST;
+            case NORTHWEST:
+                return WEST;
+            case WEST:
+                return SOUTHWEST;
+            case SOUTHWEST:
+                return SOUTH;
+            case SOUTH:
+                return SOUTHEAST;
+            case SOUTHEAST:
+                return EAST;
+            case EAST:
+                return NORTHEAST;
+            case NORTHEAST:
+                return NORTH;
+            default:
+                return SAMEPOINT;
+        }
+    }
+
     public boolean equals(Direction2D direction)
     {
         return direction.x == this.x && direction.z == this.z;
