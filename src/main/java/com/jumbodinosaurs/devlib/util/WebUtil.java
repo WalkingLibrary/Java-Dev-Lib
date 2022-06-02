@@ -47,9 +47,8 @@ public class WebUtil
         {
             response = GeneralUtil.scanStream(connectionIn);
         }
-        
         urlResponse = new HttpResponse(returnCode, response);
-        
+        urlResponse.setHeaders(connection.getHeaderFields());
         return urlResponse;
     }
     
@@ -76,7 +75,7 @@ public class WebUtil
             response = GeneralUtil.scanStream(connectionIn);
         }
         urlResponse = new HttpResponse(returnCode, response);
-        
+        urlResponse.setHeaders(connection.getHeaderFields());
         return urlResponse;
     }
     
