@@ -47,12 +47,18 @@ public class ResourceLoaderUtil
     public String cleanJarPath(String filePath)
     {
         String copyFilePath = filePath;
-        if(copyFilePath.contains("!"))
+
+        if (copyFilePath.contains("%20"))
+        {
+            copyFilePath = copyFilePath.replaceAll("%20", " ");
+        }
+
+        if (copyFilePath.contains("!"))
         {
             copyFilePath = copyFilePath.split("!")[0];
         }
-    
-        if(copyFilePath.startsWith("file:/"))
+
+        if (copyFilePath.startsWith("file:/"))
         {
             copyFilePath = copyFilePath.substring("file:/".length());
         }
