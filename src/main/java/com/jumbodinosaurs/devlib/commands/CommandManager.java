@@ -46,20 +46,37 @@ public class CommandManager
         CommandParser parser = new CommandParser(input, hasPrefix);
         String command = parser.getCommand();
         ArrayList<Parameter> parameters = parser.getParameters();
-        for(Command consoleCommand : getLoadedCommands())
+
+        ArrayList<Command> possibleCommands = new ArrayList<>();
+        for (Command consoleCommand : getLoadedCommands())
         {
-            if(consoleCommand.getCommand().toLowerCase().equals(command.toLowerCase().trim()))
+            if (consoleCommand.getCommand().toLowerCase().equals(command.toLowerCase().trim()))
             {
-                if(consoleCommand instanceof CommandWithParameters)
+                if (consoleCommand instanceof CommandWithParameters)
                 {
                     ((CommandWithParameters) consoleCommand).setParameters(parameters);
-                    
+
                 }
-                return consoleCommand;
+                possibleCommands.add(consoleCommand);
             }
         }
-        
-        return null;
+
+
+        if (possibleCommands.size() <= 0)
+        {
+            return null;
+        }
+
+        Command latestVersionCommand = possibleCommands.get(0);
+
+        for (Command possibleCommand : possibleCommands)
+        {
+            if (possibleCommand.getVersion() > latestVersionCommand.getVersion())
+            {
+                latestVersionCommand = possibleCommand;
+            }
+        }
+        return latestVersionCommand;
     }
     
     public static ArrayList<String> getCategories()
