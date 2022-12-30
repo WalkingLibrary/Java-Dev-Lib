@@ -8,6 +8,7 @@ import com.jumbodinosaurs.devlib.util.objects.ProcessOutput;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,9 +26,10 @@ public class GeneralUtil
         String[] contentsOfFile = file.list();
         for(int i = 0; i < contentsOfFile.length; i++)
         {
-            if(contentsOfFile.equals(name))
+            if (contentsOfFile.equals(name))
             {
                 needToMakeFile = false;
+                break;
             }
         }
         
@@ -68,9 +70,10 @@ public class GeneralUtil
         String[] contentsOfFile = file.list();
         for(int i = 0; i < contentsOfFile.length; i++)
         {
-            if(contentsOfFile.equals(name))
+            if (contentsOfFile.equals(name))
             {
                 needToMakeFile = false;
+                break;
             }
         }
         
@@ -271,9 +274,9 @@ public class GeneralUtil
     public static File[] listFilesRecursive(File directory)
     {
         ArrayList<File> files = new ArrayList<File>();
-        for(File file : directory.listFiles())
+        for (File file : Objects.requireNonNull(directory.listFiles()))
         {
-            if(file.isDirectory())
+            if (file.isDirectory())
             {
                 files.addAll(Arrays.asList(listFilesRecursive(file)));
             }
