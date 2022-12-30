@@ -2,14 +2,10 @@ package com.jumbodinosaurs.devlib.util;
 
 
 import com.jumbodinosaurs.devlib.log.LogManager;
-import com.jumbodinosaurs.devlib.reflection.ResourceLoaderUtil;
 import com.jumbodinosaurs.devlib.util.objects.ProcessOutput;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -18,22 +14,25 @@ import java.util.zip.GZIPInputStream;
 public class GeneralUtil
 {
     public static File userDir = new File(System.getProperty("user.dir"));
-    private static final ResourceLoaderUtil resourceLoader = new ResourceLoaderUtil();
-    
+
+    private GeneralUtil()
+    {
+    }
+
     public static File checkFor(File file, String name, boolean forceDir)
     {
         boolean needToMakeFile = true;
         String[] contentsOfFile = file.list();
-        for(int i = 0; i < contentsOfFile.length; i++)
+        for (String fileName : contentsOfFile)
         {
-            if (contentsOfFile.equals(name))
+            if (fileName.equals(name))
             {
                 needToMakeFile = false;
                 break;
             }
         }
-        
-        File neededFile = new File(file.getPath() + "/" + name);
+
+        File neededFile = new File(file.getPath() + File.pathSeparator + name);
         if(needToMakeFile)
         {
             if(forceDir || name.indexOf(".") < 0)
@@ -44,11 +43,14 @@ public class GeneralUtil
             {
                 try
                 {
-                    neededFile.createNewFile();
+                    if (!neededFile.createNewFile())
+                    {
+                        throw new IOException("Could not Create File: " + name);
+                    }
                 }
                 catch(Exception e)
                 {
-                    System.out.println("Error Creating File");
+                    LogManager.consoleLogger.error("Error Creating File");
                 }
             }
         }
@@ -68,27 +70,30 @@ public class GeneralUtil
     {
         boolean needToMakeFile = true;
         String[] contentsOfFile = file.list();
-        for(int i = 0; i < contentsOfFile.length; i++)
+        for (String fileName : contentsOfFile)
         {
-            if (contentsOfFile.equals(name))
+            if (fileName.equals(name))
             {
                 needToMakeFile = false;
                 break;
             }
         }
-        
-        File neededFile = new File(file.getPath() + "/" + name);
+
+        File neededFile = new File(file.getPath() + File.pathSeparator + name);
         if(needToMakeFile)
         {
             if(name.indexOf(".") >= 0)
             {
                 try
                 {
-                    neededFile.createNewFile();
+                    if (neededFile.createNewFile())
+                    {
+                        throw new IOException("Could not Create the File: " + name);
+                    }
                 }
                 catch(Exception e)
                 {
-                    System.out.println("Error Creating File");
+                    LogManager.consoleLogger.error("Error Creating File");
                 }
             }
             else
@@ -149,8 +154,8 @@ public class GeneralUtil
             }
             catch(Exception e)
             {
-                
-                System.out.println("Error Creating Local Path");
+
+                LogManager.consoleLogger.error("Error Creating Local Path");
                 e.printStackTrace();
             }
             
@@ -183,13 +188,13 @@ public class GeneralUtil
                 }
             }
         }
-        
-        String pathToReturn = "";
+
+        StringBuilder pathToReturn = new StringBuilder();
         for(char character : charToChange)
         {
-            pathToReturn += character;
+            pathToReturn.append(character);
         }
-        return pathToReturn;
+        return pathToReturn.toString();
         
     }
     
@@ -204,7 +209,7 @@ public class GeneralUtil
         }
         catch(Exception e)
         {
-            System.out.println("Error writing to file");
+            LogManager.consoleLogger.error("Error writing to file");
         }
     }
     
@@ -224,46 +229,44 @@ public class GeneralUtil
     public static String scanFileContents(File file)
     {
         //Read File
-        String fileRequestedContents = "";
+        StringBuilder fileRequestedContents = new StringBuilder();
         try
         {
             Scanner input = new Scanner(file);
             while(input.hasNextLine())
             {
-                fileRequestedContents += input.nextLine();
-                fileRequestedContents += "\n";
+                fileRequestedContents.append(input.nextLine());
+                fileRequestedContents.append("\n");
             }
             input.close();
         }
         catch(Exception e)
         {
-            e.printStackTrace();
-            System.out.println("Error Reading File Contents");
+            LogManager.consoleLogger.error("Error Reading File Contents", e);
         }
-        return fileRequestedContents;
+        return fileRequestedContents.toString();
     }
     
     
     public static String scanStream(InputStream stream, String delimiter)
     {
-        String inputStreamContents = "";
+        StringBuilder inputStreamContents = new StringBuilder();
         try
         {
             Scanner input = new Scanner(stream);
             input.useDelimiter(delimiter);
             while(input.hasNext())
             {
-                inputStreamContents += input.next();
-                inputStreamContents += delimiter;
+                inputStreamContents.append(input.next());
+                inputStreamContents.append(delimiter);
             }
             input.close();
         }
         catch(Exception e)
         {
-            e.printStackTrace();
-            System.out.println("Error Reading Stream Contents");
+            LogManager.consoleLogger.error("Error Reading Stream Contents", e);
         }
-        return inputStreamContents;
+        return inputStreamContents.toString();
     }
     
     public static String scanStream(InputStream stream)
@@ -292,46 +295,45 @@ public class GeneralUtil
         }
         return filesToReturn;
     }
-    
+
     ////https://www.codejava.net/java-se/file-io/execute-operating-system-commands-using-runtime-exec-methods
     // This Function is for running commands via the console/command prompt
-    public static ProcessOutput execute(String command, ArrayList<String> arguments, File executionDir)
-            throws IOException, InterruptedException
+    public static ProcessOutput execute(String command, List<String> arguments, File executionDir)
+            throws IOException
     {
-    
-        String executionString = command;
-    
-        if(arguments != null)
+
+        StringBuilder executionString = new StringBuilder();
+        executionString.append(command);
+
+        if (arguments != null)
         {
-            for(String argument : arguments)
+            for (String argument : arguments)
             {
-                executionString += " " + argument;
+                executionString.append(" " + argument);
             }
         }
-        
-        LogManager.consoleLogger.debug("Executing Command:\n" +
-                                       OperatorConsole.ANSI_YELLOW +
-                                       executionString +
-                                       OperatorConsole.ANSI_RESET +
-                                       "\n");
-        
+
+        String debugString = "Executing Command:\n %s %s %s\n";
+        debugString = String.format(debugString, OperatorConsole.ANSI_YELLOW, executionString,
+                OperatorConsole.ANSI_RESET);
+        LogManager.consoleLogger.debug(debugString);
+
         Process process;
-        if(executionDir == null)
+        if (executionDir == null)
         {
-            process = Runtime.getRuntime().exec(executionString);
+            process = Runtime.getRuntime().exec(executionString.toString());
         }
         else
         {
-            process = Runtime.getRuntime().exec(executionString, null, executionDir);
+            process = Runtime.getRuntime().exec(executionString.toString(), null, executionDir);
         }
-        
-        
+
+
         String successOutput = GeneralUtil.scanStream(process.getInputStream(), "\n");
         String failureOutput = GeneralUtil.scanStream(process.getErrorStream(), "\n");
-    
-        ProcessOutput output = new ProcessOutput(successOutput, failureOutput);
-        
-        return output;
+
+        return new ProcessOutput(successOutput, failureOutput);
+
     }
     
     public static StringBuffer replaceUnicodeCharacters(String data)
@@ -377,18 +379,20 @@ public class GeneralUtil
             }
             return;
         }
-        
-        
+
+
         InputStream in = null;
         OutputStream out = null;
         in = new FileInputStream(source);
         out = new FileOutputStream(destination);
         byte[] buffer = new byte[1024];
         int length;
-        while((length = in.read(buffer)) > 0)
+        while ((length = in.read(buffer)) > 0)
         {
             out.write(buffer, 0, length);
         }
+        in.close();
+        out.close();
     }
     
     public static void decompressGzip(File source, File target)
