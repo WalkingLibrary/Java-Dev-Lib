@@ -21,39 +21,35 @@ public class GeneralUtil
 
     public static File checkFor(File file, String name, boolean forceDir)
     {
-        boolean needToMakeFile = true;
+        File neededFile = new File(file.getPath() + File.pathSeparator + name);
         String[] contentsOfFile = file.list();
-        for (String fileName : contentsOfFile)
+
+        if (contentsOfFile != null)
         {
-            if (fileName.equals(name))
+            for (String fileName : contentsOfFile)
             {
-                needToMakeFile = false;
-                break;
+                if (fileName.equals(name))
+                {
+                    return neededFile;
+                }
             }
         }
 
-        File neededFile = new File(file.getPath() + File.pathSeparator + name);
-        if(needToMakeFile)
+        if (forceDir || !name.contains("."))
         {
-            if(forceDir || name.indexOf(".") < 0)
-            {
-                neededFile.mkdir();
-            }
-            else
-            {
-                try
-                {
-                    if (!neededFile.createNewFile())
-                    {
-                        throw new IOException("Could not Create File: " + name);
-                    }
-                }
-                catch(Exception e)
-                {
-                    LogManager.consoleLogger.error("Error Creating File");
-                }
-            }
+            neededFile.mkdir();
+            return neededFile;
         }
+
+        try
+        {
+            neededFile.createNewFile();
+        }
+        catch (Exception e)
+        {
+            LogManager.consoleLogger.error("Error Creating File");
+        }
+
         return neededFile;
     }
     
@@ -68,40 +64,7 @@ public class GeneralUtil
      */
     public static File checkFor(File file, String name)
     {
-        boolean needToMakeFile = true;
-        String[] contentsOfFile = file.list();
-        for (String fileName : contentsOfFile)
-        {
-            if (fileName.equals(name))
-            {
-                needToMakeFile = false;
-                break;
-            }
-        }
-
-        File neededFile = new File(file.getPath() + File.pathSeparator + name);
-        if(needToMakeFile)
-        {
-            if(name.indexOf(".") >= 0)
-            {
-                try
-                {
-                    if (neededFile.createNewFile())
-                    {
-                        throw new IOException("Could not Create the File: " + name);
-                    }
-                }
-                catch(Exception e)
-                {
-                    LogManager.consoleLogger.error("Error Creating File");
-                }
-            }
-            else
-            {
-                neededFile.mkdir();
-            }
-        }
-        return neededFile;
+        return checkFor(file, name, false);
     }
     
     
