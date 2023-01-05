@@ -5,7 +5,10 @@ import com.jumbodinosaurs.devlib.log.LogManager;
 import com.jumbodinosaurs.devlib.util.objects.ProcessOutput;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
@@ -21,7 +24,7 @@ public class GeneralUtil
 
     public static File checkFor(File file, String name, boolean forceDir)
     {
-        File neededFile = new File(file.getPath() + File.pathSeparator + name);
+        File neededFile = new File(file.getPath() + File.separator + name);
         String[] contentsOfFile = file.list();
 
         if (contentsOfFile != null)
@@ -240,7 +243,12 @@ public class GeneralUtil
     public static File[] listFilesRecursive(File directory)
     {
         ArrayList<File> files = new ArrayList<File>();
-        for (File file : Objects.requireNonNull(directory.listFiles()))
+        if (directory == null || directory.listFiles() == null)
+        {
+            return new File[0];
+        }
+
+        for (File file : directory.listFiles())
         {
             if (file.isDirectory())
             {
@@ -251,6 +259,7 @@ public class GeneralUtil
                 files.add(file);
             }
         }
+
         File[] filesToReturn = new File[files.size()];
         for(int i = 0; i < files.size(); i++)
         {
