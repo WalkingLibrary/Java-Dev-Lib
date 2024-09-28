@@ -52,7 +52,9 @@ dependencies {
 
 
 def versionInfo = ZoltuGitVersioning.versionInfo
-print "Build Version: ${versionInfo.major}.${versionInfo.minor}.${versionInfo.commitCount}\n"
+def versionString = "${versionInfo.major}.${versionInfo.minor}.${versionInfo.commitCount}"
+
+print "Build Version: ${versionString}\n"
 
 /*
 jar {
@@ -67,12 +69,15 @@ jar {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            from components.java  // This line specifies that the publication should consist of the main Java component.
-
-            // Specify your project's group, name, and version
+            from components.java  // Main Java component
             groupId = 'com.jumbodinosaurs'
             artifactId = 'Java-Dev-Lib'
-            version = versionInfo
+            version = versionString  // Use the string version here
         }
     }
+
+    repositories {
+        mavenLocal()  // Publish to local Maven repository
+    }
 }
+
