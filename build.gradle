@@ -19,6 +19,7 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: "com.zoltu.git-versioning"
+apply plugin: "maven-publish"
 
 group 'com.jumbodinosaurs'
 archivesBaseName = "jumsdevlib"
@@ -49,6 +50,10 @@ dependencies {
     implementation group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '9.2.0.jre8'
 }
 
+
+def versionInfo = ZoltuGitVersioning.versionInfo
+print "Build Version: ${versionInfo.major}.${versionInfo.minor}.${versionInfo.commitCount}\n"
+
 /*
 jar {
     manifest {
@@ -58,3 +63,16 @@ jar {
     }
 }
 */
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java  // This line specifies that the publication should consist of the main Java component.
+
+            // Specify your project's group, name, and version
+            groupId = 'com.jumbodinosaurs'
+            artifactId = 'Java-Dev-Lib'
+            version = versionInfo
+        }
+    }
+}
